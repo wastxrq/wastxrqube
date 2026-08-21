@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ChevronIcon } from '@/components/icons'
 
 const props = defineProps<{ defaultOpen?: boolean; count: number; label: string }>()
 const open = ref(props.defaultOpen ?? false)
@@ -15,7 +16,7 @@ defineExpose({ open })
           <span class="label">{{ label }}</span>
         </div>
       </slot>
-      <span class="chev">▾</span>
+      <ChevronIcon class="chev" />
     </div>
     <div v-if="open" class="collapsible-body">
       <slot />
@@ -32,6 +33,7 @@ defineExpose({ open })
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 53px;
   padding: 14px 18px;
   cursor: pointer;
 }
@@ -40,7 +42,7 @@ defineExpose({ open })
 }
 .chev {
   color: var(--muted);
-  font-size: 0.8rem;
+  flex-shrink: 0;
   transition: transform 0.15s;
 }
 .collapsible.open .chev {
