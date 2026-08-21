@@ -7,3 +7,10 @@ export interface LastLayerView {
   left: Facelet[]
   right: Facelet[]
 }
+
+export interface FaceLayoutEntry {
+  face: Facelet
+  col: number
+  row: number
+  startIndex: number
+}

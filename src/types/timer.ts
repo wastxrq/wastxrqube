@@ -1,5 +1,10 @@
 export type TimerState = 'idle' | 'holding' | 'ready' | 'running'
 
+export interface UseHoldTimerOptions {
+  holdMs?: number
+  onComplete?: (ms: number) => void
+}
+
 export interface OllAttempt {
   caseId: number
   ms: number | null // null = skipped, no time logged
@@ -11,4 +16,23 @@ export interface CaseStats {
   name: string
   mean: number
   times: number[]
+}
+
+export type SolvePenalty = 'none' | '+2' | 'DNF'
+
+export interface Solve {
+  time: number
+  penalty: SolvePenalty
+  scramble: string
+  date: number
+}
+
+export interface TimerSession {
+  name: string
+  solves: Solve[]
+}
+
+export interface PersistedTimerState {
+  activeSessionName: string
+  sessions: TimerSession[]
 }

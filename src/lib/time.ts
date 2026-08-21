@@ -1,5 +1,6 @@
-/** Formats a duration in milliseconds as a stopwatch string, e.g. 4.91 or 1:06.15. */
+/** Formats a duration in milliseconds as a stopwatch string, e.g. 4.91 or 1:06.15. Returns 'DNF' for Infinity (a did-not-finish average or solve). */
 export function formatTime(ms: number): string {
+  if (ms === Infinity) return 'DNF'
   const totalCs = Math.round(ms / 10)
   const min = Math.floor(totalCs / 6000)
   const sec = Math.floor((totalCs % 6000) / 100)

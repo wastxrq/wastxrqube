@@ -1,11 +1,6 @@
 import { DEFAULT_HOLD_MS } from '@/constants'
-import type { TimerState } from '@/types'
+import type { TimerState, UseHoldTimerOptions } from '@/types'
 import { ref } from 'vue'
-
-export interface UseHoldTimerOptions {
-  holdMs?: number
-  onComplete?: (ms: number) => void
-}
 
 /**
  * Hold-to-start timer state machine, cstimer/stackmat style.

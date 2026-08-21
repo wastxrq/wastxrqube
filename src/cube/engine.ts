@@ -425,4 +425,11 @@ export function randomScramble(length = 20): string {
   return moves.join(' ')
 }
 
+/** Applies a scramble (or any move sequence) to a solved cube and returns its 54-char facelet string. */
+export function scrambledFacelets(scramble: string): string {
+  const c = new Cube()
+  c.move(scramble)
+  return c.asString()
+}
+
 export { Cube }
