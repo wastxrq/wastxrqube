@@ -1,0 +1,107 @@
+/**
+ * * OLL (Orientation of Last Layer) algorithm data.
+ * * Case numbers follow the common speedsolving.com numbering (1-57).
+ */
+
+import type { OllCase, OllGroup } from '@/types'
+
+export const ollGroups: OllGroup[] = [
+  { name: 'All Edges Oriented', cases: [26, 27, 21, 22, 24, 25, 23] },
+  { name: 'T-Shapes', cases: [33, 45] },
+  { name: 'Squares', cases: [5, 6] },
+  { name: 'C-Shapes', cases: [34, 46] },
+  { name: 'W-Shapes', cases: [36, 38] },
+  { name: 'Corners Correct, Edges Flipped', cases: [28, 57] },
+  { name: 'P-Shapes', cases: [31, 32, 43, 44] },
+  { name: 'I-Shapes', cases: [51, 56, 52, 55] },
+  { name: 'Fish Shapes', cases: [9, 10, 35, 37] },
+  { name: 'Knight Move Shapes', cases: [13, 14, 15, 16] },
+  { name: 'Awkward Shapes', cases: [29, 30, 41, 42] },
+  { name: 'L-Shapes', cases: [48, 47, 49, 50, 53, 54] },
+  { name: 'Lightning Bolts', cases: [7, 8, 11, 12, 39, 40] },
+  { name: 'No Edges Flipped', cases: [1, 2, 3, 4, 18, 19, 17, 20] },
+]
+
+export const ollCases: Record<number, OllCase> = {
+  1: { name: 'Runway', algs: ["R U2 R2 F R F' U2 R' F R F'"] },
+  2: { name: 'Zamboni', algs: ["F R U R' U' F' f R U R' U' f'", "y r U r' U2 R U2 R' U2 r U' r'"] },
+  3: { name: 'Anti-Mouse', algs: ["f R U R' U' f' U' F R U R' U' F'"] },
+  4: { name: 'Mouse', algs: ["f R U R' U' f' U F R U R' U' F'"] },
+  5: { name: 'Lefty Square', algs: ["r' U2 R U R' U r"] },
+  6: { name: 'Righty Square', algs: ["r U2 R' U' R U' r'"] },
+  7: { name: 'Fat Sune', algs: ["r U R' U R U2 r'"] },
+  8: { name: 'Fat Antisune', algs: ["r' U' R U' R' U2 r", "y2 l' U' L U' L' U2 l"] },
+  9: { name: 'Kite', algs: ["R U R' U' R' F R2 U R' U' F'", "R' U' R y r U' r' U r U r'"] },
+  10: { name: 'Anti-Kite', algs: ["R U R' U R' F R F' R U2 R'", "R U R' y R' F R U' R' F' R"] },
+  11: { name: 'Downstairs', algs: ["r' R2 U R' U R U2 R' U M'"] },
+  12: {
+    name: 'Upstairs',
+    algs: ["M' R' U' R U' R' U2 R U' M", "y F R U R' U' F' U F R U R' U' F'"],
+  },
+  13: { name: 'Gun', algs: ["r U' r' U' r U r' y' R' U R", "F U R U' R2 F' R U R U' R'"] },
+  14: { name: 'Anti-Gun', algs: ["R' F R U R' F' R F U' F'"] },
+  15: { name: 'Squeegee', algs: ["r' U' r R' U' R U r' U r"] },
+  16: { name: 'Anti-Squeegee', algs: ["r U r' R U R' U' r U' r'"] },
+  17: { name: 'Slash', algs: ["R U R' U R' F R F' U2 R' F R F'"] },
+  18: {
+    name: 'Crown',
+    algs: ["y R U2 R2 F R F' U2 M' U R U' r'", "r U R' U R U2 r' r' U' R U' R' U2 r"],
+  },
+  19: { name: 'Bunny', algs: ["M U R U R' U' M' R' F R F'"] },
+  20: { name: 'Checkers', algs: ["M U R U R' U' M2 U R U' r'", "r U R' U' M2 U R U' R' U' M'"] },
+  21: {
+    name: 'Double Headlights (H)',
+    algs: ["R U2 R' U' R U R' U' R U' R'", "y R U R' U R U' R' U R U2 R'"],
+  },
+  22: { name: 'Pi-Shape', algs: ["R U2 R2 U' R2 U' R2 U2 R"] },
+  23: { name: 'U-Shape', algs: ["R2 D R' U2 R D' R' U2 R'", "y2 R2 D' R U2 R' D R U2 R"] },
+  24: { name: 'Hammerhead', algs: ["r U R' U' r' F R F'", "y R U R D R' U' R D' R2"] },
+  25: { name: 'L-Shape', algs: ["y F' r U R' U' r' F R", "x R' U R D' R' U' R D x'"] },
+  26: { name: 'Antisune', algs: ["R U2 R' U' R U' R'", "y' R' U' R U' R' U2 R"] },
+  27: { name: 'Sune', algs: ["R U R' U R U2 R'", "y' R' U2 R U R' U R"] },
+  28: { name: 'Stealth', algs: ["r U R' U' M U R U' R'"] },
+  29: {
+    name: 'Spotted Chameleon',
+    algs: ["y R U R' U' R U' R' F' U' F R U R'", "M U R U R' U' R' F R F' M'"],
+  },
+  30: {
+    name: 'Anti-Spotted Chameleon',
+    algs: ["y' F U R U2 R' U' R U2 R' U' F'", "y' F R' F R2 U' R' U' R U R' F2"],
+  },
+  31: { name: 'Couch', algs: ["R' U' F U R U' R' F' R"] },
+  32: { name: 'Anti-Couch', algs: ["R U B' U' R' U R B R'", "S R U R' U' R' F R f'"] },
+  33: { name: 'Key', algs: ["R U R' U' R' F R F'"] },
+  34: { name: 'City', algs: ["R U R2 U' R' F R U R U' F'"] },
+  35: { name: 'Fish Salad', algs: ["R U2 R2 F R F' R U2 R'"] },
+  36: { name: 'Sea Mew', algs: ["R' U' R U' R' U R U l U' R' U x"] },
+  37: { name: 'Mounted Fish', algs: ["F R U' R' U' R U R' F'"] },
+  38: { name: 'Mario', algs: ["R U R' U R U' R' U' R' F R F'"] },
+  39: { name: 'Fung', algs: ["L F' L' U' L U F U' L'", "F R U R' U' F' R' U' R U' R' U2 R"] },
+  40: { name: 'Anti-Fung', algs: ["R' F R U R' U' F' U R"] },
+  41: { name: 'Awkward Fish', algs: ["R U R' U R U2 R' F R U R' U' F'"] },
+  42: {
+    name: 'Anti-Awkward Fish',
+    algs: ["R' U' R U' R' U2 R F R U R' U' F'", "y R' F R F' R' F R F' R U R' U' R U R'"],
+  },
+  43: { name: 'Anti-P', algs: ["y R' U' F' U F R"] },
+  44: { name: 'P-Shape', algs: ["f R U R' U' f'", "y2 F U R U' R' F'"] },
+  45: { name: 'T-Shape', algs: ["F R U R' U' F'"] },
+  46: { name: "Seein' Headlights", algs: ["R' U' R' F R F' U R"] },
+  47: {
+    name: 'Anti-Breakneck',
+    algs: ["F' L' U' L U L' U' L U F", "R' U' R' F R F' R' F R F' U R"],
+  },
+  48: { name: 'Breakneck', algs: ["F R U R' U' R U R' U' F'"] },
+  49: { name: 'Right Back Squeezy', algs: ["r U' r2 U r2 U r2 U' r"] },
+  50: {
+    name: 'Right Front Squeezy',
+    algs: ["r' U r2 U' r2 U' r2 U r'", "y' R U2 R' U' R U' R' F R U R' U' F'"],
+  },
+  51: { name: 'Bottlecap', algs: ["f R U R' U' R U R' U' f'", "y2 F U R U' R' U R U' R' F'"] },
+  52: { name: 'Rice Cooker', algs: ["R' U' R U' R' U y' R' U R B"] },
+  53: { name: 'Frying Pan', algs: ["r' U' R U' R' U R U' R' U2 r"] },
+  54: { name: 'Anti-Frying Pan', algs: ["r U R' U R U' R' U R U2 r'"] },
+  55: { name: 'Highway', algs: ["y R' F R U R U' R2 F' R2 U' R' U R U R'"] },
+  56: { name: 'Streetlights', algs: ["r' U' r U' R' U R U' R' U R r' U r"] },
+  57: { name: 'H-Shape', algs: ["R U R' U' M' U R U' r'"] },
+}
