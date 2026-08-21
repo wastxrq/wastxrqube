@@ -9,25 +9,8 @@ import {
   RECENT_MEAN_WINDOW,
   SLOW_THRESHOLD_FACTOR,
 } from '@/constants'
+import { loadJson, saveJson } from '@/lib/storage'
 import type { CaseStats, OllAttempt } from '@/types'
-
-function loadJson<T>(key: string, fallback: T): T {
-  try {
-    const raw = localStorage.getItem(key)
-    if (!raw) return fallback
-    return JSON.parse(raw) as T
-  } catch {
-    return fallback
-  }
-}
-
-function saveJson(key: string, value: unknown) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value))
-  } catch {
-    /* storage unavailable — fail silently, in-memory state still works this tab */
-  }
-}
 
 export const useOllPracticeStore = defineStore('ollPractice', () => {
   const selectedCases = ref<number[]>(loadJson(OLL_SELECTION_STORAGE_KEY, [31, 32]))
