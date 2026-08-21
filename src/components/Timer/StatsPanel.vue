@@ -44,7 +44,7 @@ const store = useTimerSessionsStore()
 }
 .stat .label {
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
