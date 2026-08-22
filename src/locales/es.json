@@ -1,0 +1,130 @@
+{
+  "common": {
+    "newScrambleTitle": "Nueva mezcla",
+    "plural": {
+      "case": { "one": "caso", "few": "casos", "many": "casos" },
+      "solve": { "one": "resolución", "few": "resoluciones", "many": "resoluciones" }
+    }
+  },
+  "app": {
+    "tabs": {
+      "timer": "Timer",
+      "oll": "OLL",
+      "pll": "PLL",
+      "f2l": "F2L"
+    }
+  },
+  "timer": {
+    "title": "Timer",
+    "hintIdle": "Espacio — iniciar/detener · Supr/Retroceso — eliminar la última resolución",
+    "hintInspecting": "Espacio — empezar a resolver"
+  },
+  "stats": {
+    "mean": "media",
+    "best": "mejor"
+  },
+  "oll": {
+    "title": "Práctica de OLL",
+    "recapBanner": "Recap: quedan {n} {word} que fueron lentos",
+    "exitRecap": "Salir",
+    "showAlg": "Mostrar algoritmo",
+    "hideAlg": "Ocultar algoritmo",
+    "skip": "Omitir →",
+    "hint": "Espacio — iniciar/detener · Supr/Retroceso — eliminar el último resultado",
+    "statSolved": "resueltos",
+    "statBest": "mejor",
+    "statMean": "media",
+    "recapButton": "Recap ({n})",
+    "emptyState": "Elige casos arriba para empezar a practicar"
+  },
+  "ollSelector": {
+    "selectedSuffix": "seleccionados",
+    "clearButton": "Borrar",
+    "doneButton": "Listo"
+  },
+  "ollStats": {
+    "practicedSuffix": "practicados",
+    "emptyState": "Todavía no hay resultados"
+  },
+  "pll": {
+    "title": "Práctica de PLL",
+    "recapBanner": "Recap: quedan {n} {word} que fueron lentos",
+    "exitRecap": "Salir",
+    "showAlg": "Mostrar algoritmo",
+    "hideAlg": "Ocultar algoritmo",
+    "skip": "Omitir →",
+    "hint": "Espacio — iniciar/detener · Supr/Retroceso — eliminar el último resultado",
+    "statSolved": "resueltos",
+    "statBest": "mejor",
+    "statMean": "media",
+    "recapButton": "Recap ({n})",
+    "emptyState": "Elige casos arriba para empezar a practicar"
+  },
+  "pllSelector": {
+    "selectedSuffix": "seleccionados",
+    "clearButton": "Borrar",
+    "doneButton": "Listo"
+  },
+  "pllStats": {
+    "practicedSuffix": "practicados",
+    "emptyState": "Todavía no hay resultados"
+  },
+  "f2l": {
+    "title": "F2L Guide",
+    "guideLabel": "Guía de F2L",
+    "introHeading": "F2L — Primeras dos capas",
+    "introBody": "F2L reemplaza el paso de principiante de resolver los bordes de la capa central uno por uno con algo mucho más rápido: emparejar una esquina con su borde correspondiente y colocarlos juntos en un solo movimiento. Bien hecho, este paso suele ser la parte más grande de una resolución CFOP, por lo que también es el mayor margen para ganar velocidad.",
+    "coreIdeaHeading": "La idea central",
+    "coreIdeaBody": "Después de la cruz, hay que colocar cuatro pares esquina-borde en las últimas cuatro ranuras. En lugar de resolverlos como piezas separadas, busca una esquina y un borde que compartan dos colores, combínalos en un par usando la capa superior como espacio libre, e inserta el par en su ranura en un solo movimiento. La mayoría de los casos no necesitan ningún algoritmo memorizado: surgen de entender un pequeño conjunto de movimientos recurrentes (esto es lo que J Perm y la mayoría de los speedcubers quieren decir con «F2L intuitivo»).",
+    "speedHeading": "Cómo hacerse realmente más rápido",
+    "speedTip1Title": "Apréndelo primero de forma intuitiva.",
+    "speedTip1Body": "Dedica tiempo a entender por qué un par se combina y encaja de esa manera antes de recurrir a una hoja de algoritmos. Los algoritmos sin comprensión se desmoronan en cuanto un caso se ve un poco distinto al de la imagen.",
+    "speedTip2Title": "Evita las rotaciones del cubo.",
+    "speedTip2Body": "Cada rotación cuesta tiempo de reconocimiento. Aprende a seguir las piezas en relación con las caras R y F sin girar todo el agarre.",
+    "speedTip3Title": "Mira hacia adelante.",
+    "speedTip3Body": "Mientras terminas la cruz, busca con la vista tu primer par. Mientras insertas un par, ya sigue el siguiente. Esta es la palanca más importante para la velocidad real de resolución, más que cualquier cambio de algoritmo.",
+    "speedTip4Title": "Usa los algoritmos como ruedines.",
+    "speedTip4Body": "Cuando tus soluciones intuitivas sean sólidas (un referente habitual son las resoluciones por debajo de 15 segundos), las hojas de algoritmos de F2L se vuelven útiles: para optimizar casos incómodos e inserciones en ranuras traseras, no para aprender el paso desde cero.",
+    "speedTip5Title": "Borde bueno / borde malo.",
+    "speedTip5Body": "Aprende a distinguir si la pegatina del color de la cruz en una pieza está arriba o al costado; eso cambia qué movimiento de preparación combina el par sin voltear el borde dos veces.",
+    "resourcesHeading": "Recursos",
+    "resources": {
+      "jperm": {
+        "title": "J Perm — F2L (guía CFOP)",
+        "note": "Explicación escrita del F2L intuitivo, consejos y la hoja de referencia de algoritmos."
+      },
+      "jpermPdf": {
+        "title": "J Perm — Mejores algoritmos de F2L (PDF)",
+        "note": "Hoja de referencia de algoritmos para cuando los casos ya se entienden de forma intuitiva."
+      },
+      "jpermYoutube": {
+        "title": "J Perm en YouTube",
+        "note": "Explicaciones en video, incluida la serie sobre F2L y anticipación (look-ahead)."
+      }
+    },
+    "browserHeading": "Referencia de casos",
+    "groups": {
+      "cornerTopEdgeMatch": "Esquina arriba, colores del borde coinciden",
+      "cornerTopEdgeOpposite": "Esquina arriba, colores del borde opuestos",
+      "cornerTopFacingUp": "Esquina arriba, mirando hacia arriba",
+      "cornerInSlotEdgeTop": "Esquina en la ranura, borde arriba",
+      "edgeInSlotCornerTop": "Borde en la ranura, esquina arriba",
+      "bothMisplaced": "Esquina y borde mal colocados en la ranura"
+    }
+  },
+  "f2lBrowser": {
+    "labelSuffix": "F2L"
+  },
+  "modal": {
+    "close": "Cerrar"
+  },
+  "solveDetail": {
+    "delete": "Eliminar"
+  },
+  "timerHistory": {
+    "deleteSessionTitle": "Eliminar sesión",
+    "sessionNamePlaceholder": "Nombre de la sesión",
+    "addButton": "Añadir",
+    "emptyState": "Todavía no hay resoluciones — mantén pulsado Espacio para empezar."
+  }
+}
