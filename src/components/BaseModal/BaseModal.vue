@@ -18,7 +18,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 <template>
   <Teleport to="body">
     <div v-if="open" class="modal-backdrop" @click.self="close">
-      <div class="modal panel" :style="{ maxWidth: maxWidth ?? '360px' }">
+      <div class="modal panel" :style="{ maxWidth: maxWidth ?? 'clamp(360px, 46vw, 560px)' }">
         <button class="modal-close" title="Закрити" @click="close">✕</button>
         <slot />
       </div>
@@ -40,7 +40,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 .modal {
   position: relative;
   width: 100%;
-  padding: 32px 28px 28px;
+  padding: clamp(32px, 4vw, 48px) clamp(28px, 3.5vw, 44px) clamp(28px, 3vw, 40px);
   display: flex;
   flex-direction: column;
   align-items: center;
