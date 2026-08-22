@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { ChevronIcon } from '@/components/icons'
 
-const props = defineProps<{ defaultOpen?: boolean; count: number; label: string }>()
+const props = defineProps<{ defaultOpen?: boolean; count?: number; label: string }>()
 const open = ref(props.defaultOpen ?? false)
 defineExpose({ open })
 </script>
@@ -12,7 +12,7 @@ defineExpose({ open })
     <div class="collapsible-head" @click="open = !open">
       <slot name="summary">
         <div class="panel-summary">
-          <span class="count">{{ count }}</span>
+          <span v-if="count !== undefined" class="count">{{ count }}</span>
           <span class="label">{{ label }}</span>
         </div>
       </slot>
