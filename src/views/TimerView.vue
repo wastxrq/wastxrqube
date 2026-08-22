@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { CubeNet, StatsPanel, TimerHistory } from '@/components'
 import { RefreshIcon } from '@/components/icons'
-import { useHoldTimer } from '@/composables'
+import { useDeleteHotkey, useHoldTimer } from '@/composables'
 import { INSPECTION_MS } from '@/constants'
 import { randomScramble, scrambledFacelets } from '@/cube'
 import { effectiveTime, formatTime } from '@/lib'
@@ -32,53 +32,58 @@ const inspectionRemaining = computed(() =>
   Math.max(0, Math.ceil((INSPECTION_MS - timer.inspectionElapsed.value) / 1000)),
 )
 
-// While idle, keep showing the last result (with any penalty applied) rather than resetting to 0.00 —
-// derived from the store so editing the last solve's penalty in the history list stays in sync here too.
+/**
+ * While idle, keep showing the last result (with any penalty applied) rather than resetting to 0.00 —
+ * derived from the store so editing the last solve's penalty in the history list stays in sync here too.
+ */
 const lastSolve = computed(() => store.solves[store.solves.length - 1])
 const lastSolveIndex = computed(() => store.solves.length - 1)
 const shownMs = computed(() => {
   if (timer.state.value !== 'idle') return timer.elapsed.value
   return lastSolve.value ? effectiveTime(lastSolve.value) : 0
 })
+
 const displayText = computed(() =>
   timer.state.value === 'inspecting'
     ? String(inspectionRemaining.value)
     : formatTime(shownMs.value),
 )
+
 const hintText = computed(() =>
   timer.state.value === 'inspecting'
     ? "Space — почати розв'язання"
-    : "Space — старт/стоп · Delete — видалити останній розв'язок",
+    : "Space — старт/стоп · Delete/Backspace — видалити останній розв'язок",
 )
 
 function newScramble() {
   scramble.value = randomScramble()
 }
 
+useDeleteHotkey({
+  enabled: () => timer.state.value !== 'running' && store.solves.length > 0,
+  onDelete: () => store.deleteSolve(store.solves.length - 1),
+})
+
 function onWindowKeydown(e: KeyboardEvent) {
-  if (e.key === 'Delete') {
-    // Guard key-repeat (holding Delete down) and mid-solve presses, matching OllTrainerView's guard.
-    if (!e.repeat && timer.state.value !== 'running' && store.solves.length > 0) {
-      e.preventDefault()
-      store.deleteSolve(store.solves.length - 1)
-    }
-    return
-  }
   if (e.code !== 'Space') return
+
   if (['INPUT', 'TEXTAREA'].includes((document.activeElement as HTMLElement | null)?.tagName ?? ''))
     return
   e.preventDefault()
   timer.press()
 }
+
 function onWindowKeyup(e: KeyboardEvent) {
   if (e.code !== 'Space') return
   e.preventDefault()
   timer.release()
 }
+
 onMounted(() => {
   window.addEventListener('keydown', onWindowKeydown)
   window.addEventListener('keyup', onWindowKeyup)
 })
+
 onUnmounted(() => {
   window.removeEventListener('keydown', onWindowKeydown)
   window.removeEventListener('keyup', onWindowKeyup)

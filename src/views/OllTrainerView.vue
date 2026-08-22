@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { OllCaseDiagram, OllCaseSelector, OllCaseStats } from '@/components'
-import { useHoldTimer } from '@/composables'
+import { useDeleteHotkey, useHoldTimer } from '@/composables'
 import { RESULT_DISPLAY_DELAY_MS } from '@/constants'
 import { caseFaceletsForAlg } from '@/cube'
 import { ollCases } from '@/data/oll'
@@ -53,15 +53,12 @@ const timerColor = computed(() => {
   return 'var(--text)'
 })
 
+useDeleteHotkey({
+  enabled: () => timer.state.value !== 'running',
+  onDelete: () => store.removeLastAttempt(),
+})
+
 function onWindowKeydown(e: KeyboardEvent) {
-  if (e.key === 'Delete') {
-    // Guard key-repeat (holding Delete down) and mid-solve presses, matching oll_trainer's `allowed` flag.
-    if (!e.repeat && timer.state.value !== 'running') {
-      e.preventDefault()
-      store.removeLastAttempt()
-    }
-    return
-  }
   if (e.code !== 'Space') return
   if (['INPUT', 'TEXTAREA'].includes((document.activeElement as HTMLElement | null)?.tagName ?? ''))
     return
@@ -69,6 +66,7 @@ function onWindowKeydown(e: KeyboardEvent) {
   e.preventDefault()
   timer.press()
 }
+
 function onWindowKeyup(e: KeyboardEvent) {
   if (e.code !== 'Space') return
   if (!hasSelection.value) return
@@ -81,6 +79,7 @@ onMounted(() => {
   window.addEventListener('keydown', onWindowKeydown)
   window.addEventListener('keyup', onWindowKeyup)
 })
+
 onUnmounted(() => {
   window.removeEventListener('keydown', onWindowKeydown)
   window.removeEventListener('keyup', onWindowKeyup)
@@ -115,7 +114,7 @@ onUnmounted(() => {
         <div class="timer-display" :style="{ color: timerColor }">
           {{ formatTime(timer.elapsed.value) }}
         </div>
-        <p class="hint">Space — старт/стоп · Delete — видалити останній результат</p>
+        <p class="hint">Space — старт/стоп · Delete/Backspace — видалити останній результат</p>
 
         <div class="practice-actions">
           <button class="btn ghost" @click="revealed = !revealed">
