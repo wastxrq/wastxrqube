@@ -17,12 +17,14 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 
 <template>
   <Teleport to="body">
-    <div v-if="open" class="modal-backdrop" @click.self="close">
-      <div class="modal panel" :style="{ maxWidth: maxWidth ?? 'clamp(360px, 46vw, 560px)' }">
-        <button class="modal-close" title="Закрити" @click="close">✕</button>
-        <slot />
+    <Transition name="modal">
+      <div v-if="open" class="modal-backdrop" @click.self="close">
+        <div class="modal panel" :style="{ maxWidth: maxWidth ?? 'clamp(360px, 46vw, 560px)' }">
+          <button class="modal-close" title="Закрити" @click="close">✕</button>
+          <slot />
+        </div>
       </div>
-    </div>
+    </Transition>
   </Teleport>
 </template>
 
@@ -58,5 +60,25 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 }
 .modal-close:hover {
   color: var(--text);
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.18s ease;
+}
+.modal-enter-active .modal,
+.modal-leave-active .modal {
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+.modal-enter-from .modal,
+.modal-leave-to .modal {
+  opacity: 0;
+  transform: scale(0.96) translateY(8px);
 }
 </style>
