@@ -1,51 +1,51 @@
 import { scrambleForAlg } from '@/cube/engine'
-import { ollCases, ollGroups } from '@/data/oll'
+import { pllCases, pllGroups } from '@/data/pll'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 import {
-  OLL_HISTORY_LIMIT,
-  OLL_HISTORY_STORAGE_KEY,
-  OLL_SELECTION_STORAGE_KEY,
+  PLL_HISTORY_LIMIT,
+  PLL_HISTORY_STORAGE_KEY,
+  PLL_SELECTION_STORAGE_KEY,
   RECENT_MEAN_WINDOW,
   SLOW_THRESHOLD_FACTOR,
 } from '@/constants'
 import { loadJson, saveJson } from '@/lib/storage'
-import type { CaseStats, CaseAttempt } from '@/types'
+import type { CaseAttempt, CaseStats } from '@/types'
 
-export const useOllPracticeStore = defineStore('ollPractice', () => {
-  const selectedCases = ref<number[]>(loadJson(OLL_SELECTION_STORAGE_KEY, [31, 32]))
-  const history = ref<CaseAttempt<number>[]>(loadJson(OLL_HISTORY_STORAGE_KEY, []))
-  const currentCaseId = ref<number | null>(null)
+export const usePllPracticeStore = defineStore('pllPractice', () => {
+  const selectedCases = ref<string[]>(loadJson(PLL_SELECTION_STORAGE_KEY, ['T', 'Ja']))
+  const history = ref<CaseAttempt<string>[]>(loadJson(PLL_HISTORY_STORAGE_KEY, []))
+  const currentCaseId = ref<string | null>(null)
   const currentScramble = ref('')
   // Fixed at startRecap() time; deliberately not reactive against later selectedCases
   // changes mid-pass, so toggling a case during an active recap can't mutate the queue out from under you.
-  const recapQueue = ref<number[]>([])
+  const recapQueue = ref<string[]>([])
   const lastRecapAt = ref<number | null>(null)
   const storeInitAt = Date.now()
 
-  watch(selectedCases, (v) => saveJson(OLL_SELECTION_STORAGE_KEY, v), { deep: true })
-  watch(history, (v) => saveJson(OLL_HISTORY_STORAGE_KEY, v), { deep: true })
+  watch(selectedCases, (v) => saveJson(PLL_SELECTION_STORAGE_KEY, v), { deep: true })
+  watch(history, (v) => saveJson(PLL_HISTORY_STORAGE_KEY, v), { deep: true })
 
   const mode = computed<'practice' | 'recap'>(() =>
     recapQueue.value.length > 0 ? 'recap' : 'practice',
   )
 
-  function isSelected(id: number) {
+  function isSelected(id: string) {
     return selectedCases.value.includes(id)
   }
 
-  function selectedCountInGroup(group: { cases: number[] }) {
+  function selectedCountInGroup(group: { cases: string[] }) {
     return group.cases.filter((id) => selectedCases.value.includes(id)).length
   }
 
-  function toggleCase(id: number) {
+  function toggleCase(id: string) {
     const idx = selectedCases.value.indexOf(id)
     if (idx !== -1) selectedCases.value.splice(idx, 1)
     else selectedCases.value.push(id)
   }
 
   function toggleGroup(name: string) {
-    const group = ollGroups.find((g) => g.name === name)
+    const group = pllGroups.find((g) => g.name === name)
     if (!group) return
     const removing = selectedCountInGroup(group) > 0
     for (const id of group.cases) {
@@ -73,14 +73,14 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
       currentCaseId.value = from.length ? from[Math.floor(Math.random() * from.length)]! : null
     }
     currentScramble.value =
-      currentCaseId.value !== null ? scrambleForAlg(ollCases[currentCaseId.value]!.algs[0]!) : ''
+      currentCaseId.value !== null ? scrambleForAlg(pllCases[currentCaseId.value]!.algs[0]!) : ''
   }
 
   function logAttempt(ms: number | null) {
     if (currentCaseId.value === null) return
     history.value.push({ caseId: currentCaseId.value, ms, timestamp: Date.now() })
-    if (history.value.length > OLL_HISTORY_LIMIT) {
-      history.value.splice(0, history.value.length - OLL_HISTORY_LIMIT)
+    if (history.value.length > PLL_HISTORY_LIMIT) {
+      history.value.splice(0, history.value.length - PLL_HISTORY_LIMIT)
     }
     pickNext()
   }
@@ -90,7 +90,7 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
   }
 
   /** Average ms for a case from attempts strictly before the given timestamp (baseline for "slow" detection). */
-  function caseAverageBefore(caseId: number, beforeTimestamp: number): number | null {
+  function caseAverageBefore(caseId: string, beforeTimestamp: number): number | null {
     const times = history.value
       .filter((a) => a.caseId === caseId && a.ms !== null && a.timestamp < beforeTimestamp)
       .map((a) => a.ms as number)
@@ -99,9 +99,9 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
   }
 
   /** Case IDs, since the last recap, that were skipped or came in slow relative to their own baseline. */
-  function recapCandidates(): Set<number> {
+  function recapCandidates(): Set<string> {
     const since = lastRecapAt.value ?? storeInitAt
-    const flagged = new Set<number>()
+    const flagged = new Set<string>()
     for (const attempt of history.value) {
       if (attempt.timestamp <= since || !selectedCases.value.includes(attempt.caseId)) continue
       if (attempt.ms === null) {
@@ -133,14 +133,14 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
 
   const best = computed(() => {
     const times = history.value
-      .filter((a): a is CaseAttempt<number> & { ms: number } => a.ms !== null)
+      .filter((a): a is CaseAttempt<string> & { ms: number } => a.ms !== null)
       .map((a) => a.ms)
     return times.length ? Math.min(...times) : null
   })
 
   const recentMean = computed(() => {
     const times = history.value
-      .filter((a): a is CaseAttempt<number> & { ms: number } => a.ms !== null)
+      .filter((a): a is CaseAttempt<string> & { ms: number } => a.ms !== null)
       .map((a) => a.ms)
       .slice(-RECENT_MEAN_WINDOW)
     if (!times.length) return null
@@ -148,9 +148,9 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
   })
 
   // Most-recently-practiced case first; each case's own times stay in the order they were solved.
-  const statsByCase = computed<CaseStats<number>[]>(() => {
-    const order: number[] = []
-    const seen = new Set<number>()
+  const statsByCase = computed<CaseStats<string>[]>(() => {
+    const order: string[] = []
+    const seen = new Set<string>()
     for (let i = history.value.length - 1; i >= 0; i--) {
       const attempt = history.value[i]!
       if (attempt.ms === null || !selectedCases.value.includes(attempt.caseId)) continue
@@ -162,12 +162,12 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
     return order.map((caseId) => {
       const times = history.value
         .filter(
-          (a): a is CaseAttempt<number> & { ms: number } => a.caseId === caseId && a.ms !== null,
+          (a): a is CaseAttempt<string> & { ms: number } => a.caseId === caseId && a.ms !== null,
         )
         .map((a) => a.ms)
       return {
         caseId,
-        name: ollCases[caseId]!.name,
+        name: pllCases[caseId]!.name,
         mean: times.reduce((a, b) => a + b, 0) / times.length,
         times,
       }
