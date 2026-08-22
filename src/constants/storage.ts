@@ -9,3 +9,5 @@ export const OLL_HISTORY_LIMIT = 1000
 export const PLL_HISTORY_LIMIT = 1000
 
 export const TIMER_SESSIONS_STORAGE_KEY = 'wastxrqube:timerSessions'
+
+export const LOCALE_STORAGE_KEY = 'wastxrqube:locale'
