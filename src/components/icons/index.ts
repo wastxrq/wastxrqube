@@ -1,3 +1,5 @@
 export { default as ChevronIcon } from './ChevronIcon.vue'
+export { default as MoonIcon } from './MoonIcon.vue'
 export { default as RefreshIcon } from './RefreshIcon.vue'
+export { default as SunIcon } from './SunIcon.vue'
 export * from './logo'
