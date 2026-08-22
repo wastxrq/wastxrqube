@@ -47,6 +47,8 @@ const cells = computed(() => {
       :height="c.h"
       rx="1.2"
       :fill="c.fill"
+      stroke="var(--border)"
+      stroke-width="1"
     />
   </svg>
 </template>
