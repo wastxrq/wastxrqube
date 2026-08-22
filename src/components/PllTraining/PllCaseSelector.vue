@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { AppButton } from '@/components/AppButton'
 import { caseFaceletsForAlg } from '@/cube/engine'
-import { ollCases, ollGroups } from '@/data/oll'
+import { pllCases, pllGroups } from '@/data/pll'
 import { pluralCases } from '@/lib/pluralize'
-import { useOllPracticeStore } from '@/stores/ollPractice'
+import { usePllPracticeStore } from '@/stores/pllPractice'
 import { CASE_CARD_MAX_SIZE_PX, CASE_CARD_MIN_SIZE_PX } from '@/constants'
 import { ref } from 'vue'
 import { CaseCard } from '../CaseCard'
 import { CollapsiblePanel } from '../CollapsiblePanel'
-import OllCaseDiagram from './OllCaseDiagram.vue'
+import PllCaseDiagram from './PllCaseDiagram.vue'
 
-const store = useOllPracticeStore()
+const store = usePllPracticeStore()
 const panel = ref<InstanceType<typeof CollapsiblePanel>>()
 
 const cardSize = `clamp(${CASE_CARD_MIN_SIZE_PX}px, 10vw, ${CASE_CARD_MAX_SIZE_PX}px)`
@@ -28,7 +28,7 @@ function done() {
     :label="`${pluralCases(store.selectedCases.length)} обрано`"
   >
     <div class="groups">
-      <div v-for="group in ollGroups" :key="group.name" class="group">
+      <div v-for="group in pllGroups" :key="group.name" class="group">
         <div class="group-head" @click="store.toggleGroup(group.name)">
           <span class="name">{{ group.name }}</span>
           <span class="count"
@@ -39,12 +39,12 @@ function done() {
           <CaseCard
             v-for="id in group.cases"
             :key="id"
-            :title="`OLL ${id}`"
-            :name="ollCases[id]!.name"
+            :title="`PLL ${id}`"
+            :name="pllCases[id]!.name"
             :selected="store.isSelected(id)"
             @click="store.toggleCase(id)"
           >
-            <OllCaseDiagram :facelets="caseFaceletsForAlg(ollCases[id]!.algs[0]!)" />
+            <PllCaseDiagram :facelets="caseFaceletsForAlg(pllCases[id]!.algs[0]!)" />
           </CaseCard>
         </div>
       </div>

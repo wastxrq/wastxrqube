@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { AppButton } from '@/components/AppButton'
 import { scrambledFacelets } from '@/cube'
 import { effectiveTime, formatDate, formatTime } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
@@ -55,21 +56,13 @@ function remove() {
       </div>
 
       <div class="modal-actions">
-        <button
-          class="btn ghost"
-          :class="{ active: solve.penalty === '+2' }"
-          @click="setPenalty('+2')"
-        >
+        <AppButton :class="{ active: solve.penalty === '+2' }" @click="setPenalty('+2')">
           +2
-        </button>
-        <button
-          class="btn ghost"
-          :class="{ active: solve.penalty === 'DNF' }"
-          @click="setPenalty('DNF')"
-        >
+        </AppButton>
+        <AppButton :class="{ active: solve.penalty === 'DNF' }" @click="setPenalty('DNF')">
           DNF
-        </button>
-        <button class="btn ghost danger" @click="remove">Видалити</button>
+        </AppButton>
+        <AppButton variant="danger" @click="remove">Видалити</AppButton>
       </div>
     </template>
   </BaseModal>
@@ -119,9 +112,5 @@ function remove() {
 .modal-actions .active {
   color: var(--amber);
   border-color: var(--amber);
-}
-.modal-actions .danger:hover {
-  color: var(--danger);
-  border-color: var(--danger);
 }
 </style>

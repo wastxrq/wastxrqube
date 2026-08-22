@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { OllCaseDiagram, OllCaseSelector, OllCaseStats } from '@/components'
+import { AppButton } from '@/components/AppButton'
+import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer } from '@/composables'
 import { RESULT_DISPLAY_DELAY_MS } from '@/constants'
 import { caseFaceletsForAlg } from '@/cube'
@@ -98,11 +100,11 @@ onUnmounted(() => {
           >Recap: залишилось {{ store.recapQueue.length }}
           {{ pluralCases(store.recapQueue.length) }}, де було повільно</span
         >
-        <button class="btn ghost" @click="exitRecap">Вийти</button>
+        <AppButton @click="exitRecap">Вийти</AppButton>
       </div>
 
       <template v-if="hasSelection && currentCase">
-        <div class="scramble">{{ store.currentScramble }}</div>
+        <ScrambleRow class="scramble-slot" :scramble="store.currentScramble" />
 
         <div class="main-diagram">
           <OllCaseDiagram :facelets="currentFacelets" :size="180" />
@@ -117,10 +119,10 @@ onUnmounted(() => {
         <p class="hint">Space — старт/стоп · Delete/Backspace — видалити останній результат</p>
 
         <div class="practice-actions">
-          <button class="btn ghost" @click="revealed = !revealed">
+          <AppButton @click="revealed = !revealed">
             {{ revealed ? 'Сховати алгоритм' : 'Показати алгоритм' }}
-          </button>
-          <button class="btn ghost" @click="skip">Пропустити →</button>
+          </AppButton>
+          <AppButton @click="skip">Пропустити →</AppButton>
         </div>
         <div v-if="revealed" class="algs">
           <code v-for="(a, i) in currentCase.algs" :key="i">{{ a }}</code>
@@ -184,13 +186,9 @@ onUnmounted(() => {
   width: 100%;
   max-width: 640px;
 }
-.scramble {
-  font-family: var(--font-mono);
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
-  text-align: center;
+.scramble-slot {
   max-width: 480px;
-  margin-bottom: 8px;
+  margin-bottom: 82px;
 }
 .case-id {
   font-family: var(--font-mono);
@@ -218,7 +216,7 @@ onUnmounted(() => {
 .practice-actions {
   display: flex;
   gap: 10px;
-  margin-top: 14px;
+  margin-top: 82px;
 }
 .algs {
   display: flex;

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { AppButton } from '@/components/AppButton'
 import { CollapsiblePanel } from '@/components/CollapsiblePanel'
 import { effectiveTime, formatTime, pluralSolves } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
@@ -57,7 +58,7 @@ function submitNewSession() {
           @keyup.enter="submitNewSession"
           @keyup.esc="addingSession = false"
         />
-        <button class="btn ghost" @click="submitNewSession">Додати</button>
+        <AppButton @click="submitNewSession">Додати</AppButton>
       </div>
     </div>
 
