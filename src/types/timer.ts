@@ -7,14 +7,14 @@ export interface UseHoldTimerOptions {
   onComplete?: (ms: number, penalty: SolvePenalty) => void
 }
 
-export interface OllAttempt {
-  caseId: number
+export interface CaseAttempt<TId extends string | number = string | number> {
+  caseId: TId
   ms: number | null // null = skipped, no time logged
   timestamp: number
 }
 
-export interface CaseStats {
-  caseId: number
+export interface CaseStats<TId extends string | number = string | number> {
+  caseId: TId
   name: string
   mean: number
   times: number[]
