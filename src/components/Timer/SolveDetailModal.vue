@@ -78,12 +78,12 @@ function remove() {
 <style scoped>
 .modal-net {
   width: 100%;
-  max-width: 200px;
+  max-width: clamp(200px, 22vw, 300px);
   aspect-ratio: 144 / 106;
 }
 .modal-scramble {
   font-family: var(--font-mono);
-  font-size: 1rem;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
   letter-spacing: 0.02em;
   text-align: center;
 }
@@ -91,7 +91,7 @@ function remove() {
   font-family: var(--font-mono);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  font-size: 2.2rem;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
   display: flex;
   align-items: baseline;
   gap: 8px;
@@ -108,12 +108,12 @@ function remove() {
   display: flex;
   gap: 8px;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: clamp(0.82rem, 1vw, 0.95rem);
   font-family: var(--font-mono);
 }
 .modal-actions {
   display: flex;
-  gap: 10px;
+  gap: clamp(10px, 1.2vw, 16px);
   margin-top: 6px;
 }
 .modal-actions .active {
