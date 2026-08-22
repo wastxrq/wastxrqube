@@ -60,8 +60,10 @@ onUnmounted(() => {
     <div class="practice panel">
       <div class="scramble">{{ scramble }}</div>
 
-      <div class="timer-display" :style="{ color: timerColor }">{{ formatTime(shownMs) }}</div>
-      <p class="hint">Space — старт/стоп</p>
+      <div class="timer-block">
+        <div class="timer-display" :style="{ color: timerColor }">{{ formatTime(shownMs) }}</div>
+        <p class="hint">Space — старт/стоп</p>
+      </div>
 
       <div class="bottom-row">
         <div class="net-panel">
@@ -81,39 +83,49 @@ onUnmounted(() => {
 <style scoped>
 .practice {
   padding: 36px 28px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
   align-items: center;
-  gap: 6px;
+  justify-items: center;
+  min-height: 680px;
   margin-bottom: 20px;
 }
 .scramble {
+  align-self: start;
+  margin-top: 4rem;
   font-family: var(--font-mono);
   font-size: 1.6rem;
   font-weight: 500;
   letter-spacing: 0.02em;
   text-align: center;
   width: 100%;
-  margin-bottom: 8px;
+}
+.timer-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 48px 0;
 }
 .timer-display {
   font-family: var(--font-mono);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-size: clamp(2.2rem, 6vw, 3rem);
-  margin: 140px 0 4px;
 }
 .hint {
   color: var(--muted);
   font-size: 0.82rem;
-  margin: 0 0 140px;
+  margin: 0;
 }
 .bottom-row {
+  align-self: start;
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 48px;
   align-items: stretch;
   width: 100%;
+  margin-top: 48px;
 }
 .net-panel {
   width: 100%;
