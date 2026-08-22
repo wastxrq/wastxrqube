@@ -1,8 +1,10 @@
-export type TimerState = 'idle' | 'holding' | 'ready' | 'running'
+export type TimerState = 'idle' | 'holding' | 'ready' | 'inspecting' | 'running'
 
 export interface UseHoldTimerOptions {
   holdMs?: number
-  onComplete?: (ms: number) => void
+  /** Enables a WCA-style inspection phase (idle→inspecting) before running starts, this many ms long. */
+  inspectionMs?: number
+  onComplete?: (ms: number, penalty: SolvePenalty) => void
 }
 
 export interface OllAttempt {
