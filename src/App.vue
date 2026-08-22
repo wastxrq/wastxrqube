@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { LogoBoldIcon } from '@/components/icons'
 import { useI18n } from 'vue-i18n'
 
@@ -32,6 +33,7 @@ const tabs = router.options.routes
         </nav>
 
         <LanguageSwitcher />
+        <ThemeToggle />
       </div>
     </header>
 
