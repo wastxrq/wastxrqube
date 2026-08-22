@@ -6,6 +6,10 @@
       "solve": { "one": "розв'язок", "few": "розв'язки", "many": "розв'язків" }
     }
   },
+  "themeToggle": {
+    "toLight": "Світла тема",
+    "toDark": "Темна тема"
+  },
   "app": {
     "tabs": {
       "timer": "Timer",

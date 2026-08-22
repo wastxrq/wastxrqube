@@ -6,6 +6,10 @@
       "solve": { "one": "solve", "few": "solves", "many": "solves" }
     }
   },
+  "themeToggle": {
+    "toLight": "Light theme",
+    "toDark": "Dark theme"
+  },
   "app": {
     "tabs": {
       "timer": "Timer",
