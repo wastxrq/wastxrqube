@@ -23,6 +23,10 @@ const store = useTimerSessionsStore()
       <div class="label">mean</div>
       <div class="value">{{ store.meanTime !== null ? formatTime(store.meanTime) : '–' }}</div>
     </div>
+    <div class="stat stat-full">
+      <div class="label">best</div>
+      <div class="value">{{ store.bestTime !== null ? formatTime(store.bestTime) : '–' }}</div>
+    </div>
   </div>
 </template>
 
@@ -41,6 +45,9 @@ const store = useTimerSessionsStore()
 }
 .stat {
   text-align: center;
+}
+.stat-full {
+  grid-column: 1 / -1;
 }
 .stat .label {
   color: var(--muted);

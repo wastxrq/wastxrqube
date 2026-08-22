@@ -14,3 +14,12 @@ export const DEFAULT_SESSION_NAME = 'Сесія 1'
 export const AO5_WINDOW = 5
 export const AO12_WINDOW = 12
 export const AO100_WINDOW = 100
+
+/** Length of the WCA-style inspection countdown shown before a solve. */
+export const INSPECTION_MS = 15_000
+
+/** A solve is auto-tagged '+2' once it starts this many ms into inspection. */
+export const INSPECTION_PLUS_TWO_THRESHOLD_MS = 8_000
+
+/** A solve is auto-tagged 'DNF' once it starts this many ms into inspection. */
+export const INSPECTION_DNF_THRESHOLD_MS = 17_000

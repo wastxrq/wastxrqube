@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { CollapsiblePanel } from '@/components/CollapsiblePanel'
 import { effectiveTime, formatTime, pluralSolves } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
+import type { Solve } from '@/types'
+import { ref } from 'vue'
+import SolveDetailModal from './SolveDetailModal.vue'
 
 const store = useTimerSessionsStore()
 const newSessionName = ref('')
 const addingSession = ref(false)
+const selectedSolve = ref<Solve | null>(null)
 
 function submitNewSession() {
   if (!newSessionName.value.trim()) return
@@ -62,20 +65,27 @@ function submitNewSession() {
       Ще немає розв'язків — утримуйте Space, щоб почати.
     </p>
     <div v-else class="solve-list">
-      <div v-for="(solve, i) in [...store.solves].reverse()" :key="solve.date" class="solve-row">
+      <div
+        v-for="(solve, i) in [...store.solves].reverse()"
+        :key="solve.date"
+        class="solve-row"
+        @click="selectedSolve = solve"
+      >
         <span class="solve-idx">{{ store.solves.length - i }}</span>
         <span class="solve-time" :class="{ dnf: solve.penalty === 'DNF' }">
           {{ formatTime(effectiveTime(solve)) }}
         </span>
         <span v-if="solve.penalty !== 'none'" class="solve-penalty">{{ solve.penalty }}</span>
         <div class="solve-actions">
-          <button @click="store.setPenalty(store.solves.length - 1 - i, '+2')">+2</button>
-          <button @click="store.setPenalty(store.solves.length - 1 - i, 'DNF')">DNF</button>
-          <button @click="store.deleteSolve(store.solves.length - 1 - i)">✕</button>
+          <button @click.stop="store.setPenalty(store.solves.length - 1 - i, '+2')">+2</button>
+          <button @click.stop="store.setPenalty(store.solves.length - 1 - i, 'DNF')">DNF</button>
+          <button @click.stop="store.deleteSolve(store.solves.length - 1 - i)">✕</button>
         </div>
       </div>
     </div>
   </CollapsiblePanel>
+
+  <SolveDetailModal :solve="selectedSolve" @close="selectedSolve = null" />
 </template>
 
 <style scoped>
@@ -173,6 +183,7 @@ function submitNewSession() {
   border-radius: 6px;
   font-family: var(--font-mono);
   font-size: 0.88rem;
+  cursor: pointer;
 }
 .solve-row:hover {
   background: var(--panel-2);

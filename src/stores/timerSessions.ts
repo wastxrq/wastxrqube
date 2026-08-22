@@ -7,7 +7,7 @@ import {
   DEFAULT_SESSION_NAME,
   TIMER_SESSIONS_STORAGE_KEY,
 } from '@/constants'
-import { average, loadJson, mean, saveJson } from '@/lib'
+import { average, best, loadJson, mean, saveJson } from '@/lib'
 import type { PersistedTimerState, SolvePenalty, TimerSession } from '@/types'
 
 function defaultSessions(): TimerSession[] {
@@ -39,8 +39,8 @@ export const useTimerSessionsStore = defineStore('timerSessions', () => {
   )
   const solves = computed(() => activeSession.value.solves)
 
-  function addSolve(time: number, scramble: string) {
-    activeSession.value.solves.push({ time, penalty: 'none', scramble, date: Date.now() })
+  function addSolve(time: number, scramble: string, penalty: SolvePenalty = 'none') {
+    activeSession.value.solves.push({ time, penalty, scramble, date: Date.now() })
   }
 
   function setPenalty(index: number, penalty: SolvePenalty) {
@@ -75,6 +75,7 @@ export const useTimerSessionsStore = defineStore('timerSessions', () => {
   const ao12 = computed(() => average(solves.value, AO12_WINDOW))
   const ao100 = computed(() => average(solves.value, AO100_WINDOW))
   const meanTime = computed(() => mean(solves.value))
+  const bestTime = computed(() => best(solves.value))
 
   return {
     sessions,
@@ -91,5 +92,6 @@ export const useTimerSessionsStore = defineStore('timerSessions', () => {
     ao12,
     ao100,
     meanTime,
+    bestTime,
   }
 })
