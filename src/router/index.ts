@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 declare module 'vue-router' {
   interface RouteMeta {
-    label?: string
+    labelKey?: string
   }
 }
 
@@ -17,25 +17,25 @@ const router = createRouter({
       path: '/timer',
       name: 'timer',
       component: () => import('../views/TimerView.vue'),
-      meta: { label: 'Timer' },
+      meta: { labelKey: 'app.tabs.timer' },
     },
     {
       path: '/oll',
       name: 'oll',
       component: () => import('../views/OllTrainerView.vue'),
-      meta: { label: 'OLL' },
+      meta: { labelKey: 'app.tabs.oll' },
     },
     {
       path: '/pll',
       name: 'pll',
       component: () => import('../views/PllTrainerView.vue'),
-      meta: { label: 'PLL' },
+      meta: { labelKey: 'app.tabs.pll' },
     },
     {
       path: '/f2l',
       name: 'f2l',
       component: () => import('../views/F2lGuideView.vue'),
-      meta: { label: 'F2L' },
+      meta: { labelKey: 'app.tabs.f2l' },
     },
   ],
 })
