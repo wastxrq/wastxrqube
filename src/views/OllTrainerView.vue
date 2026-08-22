@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { OllCaseDiagram, OllCaseSelector, OllCaseStats } from '@/components'
+import { AppButton } from '@/components/AppButton'
 import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer } from '@/composables'
 import { RESULT_DISPLAY_DELAY_MS } from '@/constants'
@@ -99,7 +100,7 @@ onUnmounted(() => {
           >Recap: залишилось {{ store.recapQueue.length }}
           {{ pluralCases(store.recapQueue.length) }}, де було повільно</span
         >
-        <button class="btn ghost" @click="exitRecap">Вийти</button>
+        <AppButton @click="exitRecap">Вийти</AppButton>
       </div>
 
       <template v-if="hasSelection && currentCase">
@@ -118,10 +119,10 @@ onUnmounted(() => {
         <p class="hint">Space — старт/стоп · Delete/Backspace — видалити останній результат</p>
 
         <div class="practice-actions">
-          <button class="btn ghost" @click="revealed = !revealed">
+          <AppButton @click="revealed = !revealed">
             {{ revealed ? 'Сховати алгоритм' : 'Показати алгоритм' }}
-          </button>
-          <button class="btn ghost" @click="skip">Пропустити →</button>
+          </AppButton>
+          <AppButton @click="skip">Пропустити →</AppButton>
         </div>
         <div v-if="revealed" class="algs">
           <code v-for="(a, i) in currentCase.algs" :key="i">{{ a }}</code>

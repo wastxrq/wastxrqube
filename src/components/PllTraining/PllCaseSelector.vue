@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { AppButton } from '@/components/AppButton'
 import { caseFaceletsForAlg } from '@/cube/engine'
 import { pllCases, pllGroups } from '@/data/pll'
 import { pluralCases } from '@/lib/pluralize'
@@ -50,8 +51,8 @@ function done() {
     </div>
 
     <div class="selector-footer">
-      <button class="btn ghost" @click="store.clearSelection()">Скинути</button>
-      <button class="btn primary" @click="done">Готово</button>
+      <AppButton @click="store.clearSelection()">Скинути</AppButton>
+      <AppButton variant="primary" @click="done">Готово</AppButton>
     </div>
   </CollapsiblePanel>
 </template>
