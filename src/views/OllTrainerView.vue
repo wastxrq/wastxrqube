@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { OllCaseDiagram, OllCaseSelector, OllCaseStats } from '@/components'
+import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer } from '@/composables'
 import { RESULT_DISPLAY_DELAY_MS } from '@/constants'
 import { caseFaceletsForAlg } from '@/cube'
@@ -102,7 +103,7 @@ onUnmounted(() => {
       </div>
 
       <template v-if="hasSelection && currentCase">
-        <div class="scramble">{{ store.currentScramble }}</div>
+        <ScrambleRow class="scramble-slot" :scramble="store.currentScramble" />
 
         <div class="main-diagram">
           <OllCaseDiagram :facelets="currentFacelets" :size="180" />
@@ -184,13 +185,9 @@ onUnmounted(() => {
   width: 100%;
   max-width: 640px;
 }
-.scramble {
-  font-family: var(--font-mono);
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
-  text-align: center;
+.scramble-slot {
   max-width: 480px;
-  margin-bottom: 8px;
+  margin-bottom: 82px;
 }
 .case-id {
   font-family: var(--font-mono);
@@ -218,7 +215,7 @@ onUnmounted(() => {
 .practice-actions {
   display: flex;
   gap: 10px;
-  margin-top: 14px;
+  margin-top: 82px;
 }
 .algs {
   display: flex;

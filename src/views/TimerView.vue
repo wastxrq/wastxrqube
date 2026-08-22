@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CubeNet, StatsPanel, TimerHistory } from '@/components'
-import { RefreshIcon } from '@/components/icons'
+import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer } from '@/composables'
 import { INSPECTION_MS } from '@/constants'
 import { randomScramble, scrambledFacelets } from '@/cube'
@@ -95,18 +95,13 @@ onUnmounted(() => {
     <h1>Timer</h1>
 
     <div class="practice panel">
-      <div class="scramble-row">
-        <div class="scramble">{{ scramble }}</div>
-        <button
-          class="scramble-refresh"
-          type="button"
-          title="Нова розкладка"
-          :disabled="timer.state.value !== 'idle'"
-          @click="newScramble"
-        >
-          <RefreshIcon />
-        </button>
-      </div>
+      <ScrambleRow
+        class="scramble-slot"
+        :scramble="scramble"
+        refreshable
+        :refresh-disabled="timer.state.value !== 'idle'"
+        @refresh="newScramble"
+      />
 
       <div class="timer-block">
         <div class="timer-display" :style="{ color: timerColor }">{{ displayText }}</div>
@@ -155,41 +150,10 @@ onUnmounted(() => {
   min-height: 680px;
   margin-bottom: 20px;
 }
-.scramble-row {
+.scramble-slot {
   align-self: start;
   margin-top: 4rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
   width: 100%;
-}
-.scramble {
-  font-family: var(--font-mono);
-  font-size: 1.6rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  text-align: center;
-}
-.scramble-refresh {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--muted);
-}
-.scramble-refresh:hover:not(:disabled) {
-  color: var(--text);
-  border-color: var(--accent-dim);
-}
-.scramble-refresh:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }
 .timer-block {
   display: flex;
