@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { LogoBoldIcon } from '@/components/icons'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
+const { t } = useI18n()
 const tabs = router.options.routes
-  .filter((route) => route.meta?.label)
-  .map((route) => ({ to: route.path, label: route.meta!.label! }))
+  .filter((route) => route.meta?.labelKey)
+  .map((route) => ({ to: route.path, labelKey: route.meta!.labelKey! }))
 </script>
 
 <template>
@@ -15,17 +18,21 @@ const tabs = router.options.routes
         <LogoBoldIcon class="brand-mark" />
       </RouterLink>
 
-      <nav class="tabs">
-        <RouterLink
-          v-for="tab in tabs"
-          :key="tab.to"
-          :to="tab.to"
-          class="tab"
-          active-class="tab-active"
-        >
-          {{ tab.label }}
-        </RouterLink>
-      </nav>
+      <div class="nav-cluster">
+        <nav class="tabs">
+          <RouterLink
+            v-for="tab in tabs"
+            :key="tab.to"
+            :to="tab.to"
+            class="tab"
+            active-class="tab-active"
+          >
+            {{ t(tab.labelKey) }}
+          </RouterLink>
+        </nav>
+
+        <LanguageSwitcher />
+      </div>
     </header>
 
     <main class="content">
@@ -58,6 +65,12 @@ const tabs = router.options.routes
   height: 28px;
   width: auto;
   color: var(--accent);
+}
+
+.nav-cluster {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .tabs {
@@ -98,6 +111,10 @@ const tabs = router.options.routes
   .topbar {
     flex-direction: column;
     align-items: flex-start;
+  }
+  .nav-cluster {
+    width: 100%;
+    flex-wrap: wrap;
   }
   .tabs {
     width: 100%;

@@ -7,6 +7,9 @@ import { randomScramble, scrambledFacelets } from '@/cube'
 import { effectiveTime, formatTime } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const store = useTimerSessionsStore()
 const scramble = ref(randomScramble())
@@ -50,9 +53,7 @@ const displayText = computed(() =>
 )
 
 const hintText = computed(() =>
-  timer.state.value === 'inspecting'
-    ? "Space — почати розв'язання"
-    : "Space — старт/стоп · Delete/Backspace — видалити останній розв'язок",
+  timer.state.value === 'inspecting' ? t('timer.hintInspecting') : t('timer.hintIdle'),
 )
 
 function newScramble() {
@@ -92,7 +93,7 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <h1>Timer</h1>
+    <h1>{{ t('timer.title') }}</h1>
 
     <div class="practice panel">
       <ScrambleRow

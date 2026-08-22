@@ -4,6 +4,6 @@ export interface F2lCase {
 }
 
 export interface F2lGroup {
-  name: string
+  labelKey: string
   cases: number[]
 }

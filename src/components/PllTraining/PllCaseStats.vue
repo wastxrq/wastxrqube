@@ -1,25 +1,33 @@
 <script setup lang="ts">
-import { formatTime, pluralCases } from '@/lib'
+import { formatTime, pluralizeUk } from '@/lib'
 import { usePllPracticeStore } from '@/stores'
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { CollapsiblePanel } from '../CollapsiblePanel'
 
 const store = usePllPracticeStore()
+const { t } = useI18n()
+
+const practicedLabel = computed(
+  () =>
+    `${pluralizeUk(store.statsByCase.length, [
+      t('common.plural.case.one'),
+      t('common.plural.case.few'),
+      t('common.plural.case.many'),
+    ])} ${t('pllStats.practicedSuffix')}`,
+)
 </script>
 
 <template>
-  <CollapsiblePanel
-    :default-open="false"
-    :count="store.statsByCase.length"
-    :label="`${pluralCases(store.statsByCase.length)} практиковано`"
-  >
-    <p v-if="store.statsByCase.length === 0" class="hint">Ще немає результатів</p>
+  <CollapsiblePanel :default-open="false" :count="store.statsByCase.length" :label="practicedLabel">
+    <p v-if="store.statsByCase.length === 0" class="hint">{{ t('pllStats.emptyState') }}</p>
     <div v-else class="case-list">
       <div v-for="cs in store.statsByCase" :key="cs.caseId" class="case-row">
         <div class="case-row-head">
           <span class="case-name">{{ cs.name }}</span>
           <span class="case-mean">{{ formatTime(cs.mean) }}</span>
         </div>
-        <div class="case-times">{{ cs.times.map((t) => formatTime(t)).join(', ') }}</div>
+        <div class="case-times">{{ cs.times.map((ms) => formatTime(ms)).join(', ') }}</div>
       </div>
     </div>
   </CollapsiblePanel>

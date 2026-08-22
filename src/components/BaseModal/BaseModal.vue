@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{ open: boolean; maxWidth?: string }>()
 const emit = defineEmits<{ close: [] }>()
+
+const { t } = useI18n()
 
 function close() {
   emit('close')
@@ -20,7 +23,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
     <Transition name="modal">
       <div v-if="open" class="modal-backdrop" @click.self="close">
         <div class="modal panel" :style="{ maxWidth: maxWidth ?? 'clamp(360px, 46vw, 560px)' }">
-          <button class="modal-close" title="Закрити" @click="close">✕</button>
+          <button class="modal-close" :title="t('modal.close')" @click="close">✕</button>
           <slot />
         </div>
       </div>

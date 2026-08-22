@@ -16,12 +16,12 @@
 import type { F2lCase, F2lGroup } from '@/types'
 
 export const f2lGroups: F2lGroup[] = [
-  { name: 'Кут зверху, кольори ребра збігаються', cases: [1, 2, 3, 4, 5, 6, 7, 8] },
-  { name: 'Кут зверху, кольори ребра протилежні', cases: [9, 10, 11, 12, 13, 14, 15, 16] },
-  { name: 'Кут зверху, дивиться вгору', cases: [17, 18, 19, 20, 21, 22, 23, 24] },
-  { name: 'Кут у пазу, ребро зверху', cases: [25, 26, 27, 28, 29, 30] },
-  { name: 'Ребро у пазу, кут зверху', cases: [31, 32, 33, 34, 35, 36] },
-  { name: 'Кут і ребро обидва не на місці в пазу', cases: [37, 38, 39, 40, 41] },
+  { labelKey: 'f2l.groups.cornerTopEdgeMatch', cases: [1, 2, 3, 4, 5, 6, 7, 8] },
+  { labelKey: 'f2l.groups.cornerTopEdgeOpposite', cases: [9, 10, 11, 12, 13, 14, 15, 16] },
+  { labelKey: 'f2l.groups.cornerTopFacingUp', cases: [17, 18, 19, 20, 21, 22, 23, 24] },
+  { labelKey: 'f2l.groups.cornerInSlotEdgeTop', cases: [25, 26, 27, 28, 29, 30] },
+  { labelKey: 'f2l.groups.edgeInSlotCornerTop', cases: [31, 32, 33, 34, 35, 36] },
+  { labelKey: 'f2l.groups.bothMisplaced', cases: [37, 38, 39, 40, 41] },
 ]
 
 export const f2lCases: Record<number, F2lCase> = {

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { RefreshIcon } from '@/components/icons'
+import { useI18n } from 'vue-i18n'
 
 defineProps<{ scramble: string; refreshable?: boolean; refreshDisabled?: boolean }>()
 defineEmits<{ refresh: [] }>()
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -12,7 +15,7 @@ defineEmits<{ refresh: [] }>()
       v-if="refreshable"
       class="scramble-refresh"
       type="button"
-      title="Нова розкладка"
+      :title="t('common.newScrambleTitle')"
       :disabled="refreshDisabled"
       @click="$emit('refresh')"
     >
