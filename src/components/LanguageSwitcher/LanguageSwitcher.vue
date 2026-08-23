@@ -125,4 +125,12 @@ onUnmounted(() => window.removeEventListener('click', onClickOutside))
   background: var(--panel-2);
   color: var(--accent);
 }
+
+@media (max-width: 560px) {
+  .lang-trigger {
+    gap: 4px;
+    padding: 8px 10px;
+    font-size: 0.82rem;
+  }
+}
 </style>
