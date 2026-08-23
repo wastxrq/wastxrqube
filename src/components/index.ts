@@ -1,5 +1,6 @@
 export * from './CollapsiblePanel'
 export * from './F2lReference'
 export * from './OllTraining'
+export * from './PageSection'
 export * from './PllTraining'
 export * from './Timer'
