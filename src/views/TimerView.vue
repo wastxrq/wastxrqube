@@ -216,6 +216,7 @@ onUnmounted(() => {
 @media (max-width: 560px) {
   .practice {
     min-height: 0;
+    grid-template-rows: auto auto auto;
   }
 }
 
