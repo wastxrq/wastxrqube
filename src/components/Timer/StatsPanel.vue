@@ -62,4 +62,17 @@ const { t } = useI18n()
   font-size: 1.15rem;
   margin-top: 2px;
 }
+
+@media (max-width: 480px) {
+  .stats-panel {
+    gap: 8px 12px;
+    padding: 12px 14px;
+  }
+  .stat .label {
+    font-size: 0.7rem;
+  }
+  .stat .value {
+    font-size: 0.85rem;
+  }
+}
 </style>
