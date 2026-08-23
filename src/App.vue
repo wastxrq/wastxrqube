@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { LanguageSwitcher } from '@/components/LanguageSwitcher'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { LanguageSwitcher, ThemeToggle } from '@/components'
 import { LogoBoldIcon } from '@/components/icons'
 import { useI18n } from 'vue-i18n'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -116,15 +115,25 @@ const tabs = router.options.routes
   }
   .nav-cluster {
     width: 100%;
-    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .language-switcher,
+  .theme-toggle {
+    flex-shrink: 0;
   }
   .tabs {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
   }
   .tab {
-    flex: 1;
-    text-align: center;
-    padding: 8px 6px;
+    flex: none;
+    white-space: nowrap;
+    padding: 8px 14px;
     font-size: 0.82rem;
   }
 }
