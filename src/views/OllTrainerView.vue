@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { OllCaseDiagram, OllCaseSelector, OllCaseStats } from '@/components'
+import { OllCaseDiagram, OllCaseSelector, OllCaseStats, PageSection } from '@/components'
 import { AppButton } from '@/components/AppButton'
 import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer } from '@/composables'
@@ -104,7 +104,7 @@ onUnmounted(() => {
 
     <OllCaseSelector />
 
-    <div class="practice panel">
+    <PageSection class="practice">
       <div v-if="store.mode === 'recap'" class="recap-banner">
         <span>{{ t('oll.recapBanner', { n: store.recapQueue.length, word: recapWord }) }}</span>
         <AppButton @click="exitRecap">{{ t('oll.exitRecap') }}</AppButton>
@@ -161,7 +161,7 @@ onUnmounted(() => {
       </template>
 
       <p v-else class="hint empty-state">{{ t('oll.emptyState') }}</p>
-    </div>
+    </PageSection>
 
     <OllCaseStats />
   </div>
@@ -169,12 +169,10 @@ onUnmounted(() => {
 
 <style scoped>
 .practice {
-  padding: 36px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  margin-bottom: 20px;
 }
 .empty-state {
   padding: 20px 0;
@@ -284,5 +282,14 @@ onUnmounted(() => {
 .main-diagram {
   width: 180px;
   height: 180px;
+}
+
+@media (max-width: 560px) {
+  .scramble-slot {
+    margin-bottom: 32px;
+  }
+  .practice-actions {
+    margin-top: 32px;
+  }
 }
 </style>

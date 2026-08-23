@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CubeNet, StatsPanel, TimerHistory } from '@/components'
+import { CubeNet, PageSection, StatsPanel, TimerHistory } from '@/components'
 import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer } from '@/composables'
 import { INSPECTION_MS } from '@/constants'
@@ -95,7 +95,7 @@ onUnmounted(() => {
   <div>
     <h1>{{ t('timer.title') }}</h1>
 
-    <div class="practice panel">
+    <PageSection class="practice">
       <ScrambleRow
         class="scramble-slot"
         :scramble="scramble"
@@ -135,7 +135,7 @@ onUnmounted(() => {
           <StatsPanel />
         </div>
       </div>
-    </div>
+    </PageSection>
 
     <TimerHistory />
   </div>
@@ -143,13 +143,11 @@ onUnmounted(() => {
 
 <style scoped>
 .practice {
-  padding: 36px 28px;
   display: grid;
   grid-template-rows: 1fr auto 1fr;
   align-items: center;
   justify-items: center;
   min-height: 680px;
-  margin-bottom: 20px;
 }
 .scramble-slot {
   align-self: start;
@@ -213,6 +211,12 @@ onUnmounted(() => {
   justify-self: end;
   width: 100%;
   max-width: 320px;
+}
+
+@media (max-width: 560px) {
+  .practice {
+    min-height: 0;
+  }
 }
 
 @media (max-width: 480px) {
