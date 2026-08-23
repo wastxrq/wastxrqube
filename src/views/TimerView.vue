@@ -222,14 +222,10 @@ onUnmounted(() => {
 
 @media (max-width: 480px) {
   .bottom-row {
-    grid-template-columns: 1fr;
-    justify-items: center;
+    gap: 16px;
   }
   .net-panel {
-    max-width: 200px;
-  }
-  .stats-slot {
-    justify-self: center;
+    max-width: 150px;
   }
 }
 </style>
