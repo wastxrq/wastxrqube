@@ -5,6 +5,7 @@ import { effectiveTime, formatDate, formatTime } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
 import type { Solve } from '@/types'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { BaseModal } from '../BaseModal'
 import CubeNet from './CubeNet.vue'
 
@@ -12,6 +13,7 @@ const props = defineProps<{ solve: Solve | null }>()
 const emit = defineEmits<{ close: [] }>()
 
 const store = useTimerSessionsStore()
+const { t } = useI18n()
 
 const storeIndex = computed(() =>
   props.solve ? store.solves.findIndex((s) => s === props.solve) : -1,
@@ -62,7 +64,7 @@ function remove() {
         <AppButton :class="{ active: solve.penalty === 'DNF' }" @click="setPenalty('DNF')">
           DNF
         </AppButton>
-        <AppButton variant="danger" @click="remove">Видалити</AppButton>
+        <AppButton variant="danger" @click="remove">{{ t('solveDetail.delete') }}</AppButton>
       </div>
     </template>
   </BaseModal>

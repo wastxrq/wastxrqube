@@ -1,0 +1,134 @@
+{
+  "common": {
+    "newScrambleTitle": "New scramble",
+    "plural": {
+      "case": { "one": "case", "few": "cases", "many": "cases" },
+      "solve": { "one": "solve", "few": "solves", "many": "solves" }
+    }
+  },
+  "themeToggle": {
+    "toLight": "Light theme",
+    "toDark": "Dark theme"
+  },
+  "app": {
+    "tabs": {
+      "timer": "Timer",
+      "oll": "OLL",
+      "pll": "PLL",
+      "f2l": "F2L"
+    }
+  },
+  "timer": {
+    "title": "Timer",
+    "hintIdle": "Space — start/stop · Delete/Backspace — delete last solve",
+    "hintInspecting": "Space — start solving"
+  },
+  "stats": {
+    "mean": "mean",
+    "best": "best"
+  },
+  "oll": {
+    "title": "OLL Practice",
+    "recapBanner": "Recap: {n} {word} left that were slow",
+    "exitRecap": "Exit",
+    "showAlg": "Show algorithm",
+    "hideAlg": "Hide algorithm",
+    "skip": "Skip →",
+    "hint": "Space — start/stop · Delete/Backspace — delete last result",
+    "statSolved": "solved",
+    "statBest": "best",
+    "statMean": "mean",
+    "recapButton": "Recap ({n})",
+    "emptyState": "Select cases above to start practicing"
+  },
+  "ollSelector": {
+    "selectedSuffix": "selected",
+    "clearButton": "Clear",
+    "doneButton": "Done"
+  },
+  "ollStats": {
+    "practicedSuffix": "practiced",
+    "emptyState": "No results yet"
+  },
+  "pll": {
+    "title": "PLL Practice",
+    "recapBanner": "Recap: {n} {word} left that were slow",
+    "exitRecap": "Exit",
+    "showAlg": "Show algorithm",
+    "hideAlg": "Hide algorithm",
+    "skip": "Skip →",
+    "hint": "Space — start/stop · Delete/Backspace — delete last result",
+    "statSolved": "solved",
+    "statBest": "best",
+    "statMean": "mean",
+    "recapButton": "Recap ({n})",
+    "emptyState": "Select cases above to start practicing"
+  },
+  "pllSelector": {
+    "selectedSuffix": "selected",
+    "clearButton": "Clear",
+    "doneButton": "Done"
+  },
+  "pllStats": {
+    "practicedSuffix": "practiced",
+    "emptyState": "No results yet"
+  },
+  "f2l": {
+    "title": "F2L Guide",
+    "guideLabel": "F2L Guide",
+    "introHeading": "F2L — First Two Layers",
+    "introBody": "F2L replaces the beginner's step of solving middle-layer edges one at a time with something much faster: pairing up a corner with its matching edge and placing them together in one motion. Done well, this step is usually the biggest chunk of a CFOP solve — which is also why it's the biggest place to gain speed.",
+    "coreIdeaHeading": "The core idea",
+    "coreIdeaBody": "After the cross, four corner-edge pairs need to go into the last four slots. Instead of solving them as separate pieces, find a corner and edge that share two colors, combine them into a pair using the top layer as free space, and insert the pair into its slot in one motion. Most cases don't need a memorized algorithm at all — they fall out of understanding a small set of recurring moves (this is what J Perm and most speedcubers mean by \"intuitive F2L\").",
+    "speedHeading": "How to actually get faster",
+    "speedTip1Title": "Learn it intuitively first.",
+    "speedTip1Body": "Spend time understanding why a pair comes together and slots in the way it does before reaching for an algorithm sheet. Algorithms without understanding fall apart the moment a case looks slightly different from the picture.",
+    "speedTip2Title": "Avoid cube rotations.",
+    "speedTip2Body": "Every rotation costs recognition time. Learn to track pieces relative to the R and F faces without turning your whole grip.",
+    "speedTip3Title": "Look ahead.",
+    "speedTip3Body": "While finishing the cross, look for your first pair. While inserting one pair, already track the next. This is the single biggest lever for real solving speed, bigger than any algorithm swap.",
+    "speedTip4Title": "Use algorithms as training wheels.",
+    "speedTip4Body": "Once your intuitive solutions are solid (a common benchmark is sub-15-second solves), F2L algorithm sheets become useful — for optimizing awkward cases and back-slot insertions, not for learning the step from scratch.",
+    "speedTip5Title": "Good edge / bad edge.",
+    "speedTip5Body": "Learn to tell whether the cross-color sticker on a piece is showing on top or on the side — it changes which setup move combines the pair without flipping the edge twice.",
+    "resourcesHeading": "Resources",
+    "resources": {
+      "jperm": {
+        "title": "J Perm — F2L (CFOP guide)",
+        "note": "Written walkthrough of intuitive F2L, tips, and the algorithm reference sheet."
+      },
+      "jpermPdf": {
+        "title": "J Perm — Best F2L Algorithms (PDF)",
+        "note": "Algorithm reference sheet for once the cases are already understood intuitively."
+      },
+      "jpermYoutube": {
+        "title": "J Perm on YouTube",
+        "note": "Video walkthroughs, including the F2L and look-ahead series."
+      }
+    },
+    "browserHeading": "Case reference",
+    "groups": {
+      "cornerTopEdgeMatch": "Corner on top, edge colors match",
+      "cornerTopEdgeOpposite": "Corner on top, edge colors opposite",
+      "cornerTopFacingUp": "Corner on top, facing up",
+      "cornerInSlotEdgeTop": "Corner in slot, edge on top",
+      "edgeInSlotCornerTop": "Edge in slot, corner on top",
+      "bothMisplaced": "Corner and edge both misplaced in slot"
+    }
+  },
+  "f2lBrowser": {
+    "labelSuffix": "F2L"
+  },
+  "modal": {
+    "close": "Close"
+  },
+  "solveDetail": {
+    "delete": "Delete"
+  },
+  "timerHistory": {
+    "deleteSessionTitle": "Delete session",
+    "sessionNamePlaceholder": "Session name",
+    "addButton": "Add",
+    "emptyState": "No solves yet — hold Space to start."
+  }
+}

@@ -2,18 +2,29 @@
 import { AppButton } from '@/components/AppButton'
 import { caseFaceletsForAlg } from '@/cube/engine'
 import { ollCases, ollGroups } from '@/data/oll'
-import { pluralCases } from '@/lib/pluralize'
+import { pluralizeUk } from '@/lib/pluralize'
 import { useOllPracticeStore } from '@/stores/ollPractice'
 import { CASE_CARD_MAX_SIZE_PX, CASE_CARD_MIN_SIZE_PX } from '@/constants'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { CaseCard } from '../CaseCard'
 import { CollapsiblePanel } from '../CollapsiblePanel'
 import OllCaseDiagram from './OllCaseDiagram.vue'
 
 const store = useOllPracticeStore()
+const { t } = useI18n()
 const panel = ref<InstanceType<typeof CollapsiblePanel>>()
 
 const cardSize = `clamp(${CASE_CARD_MIN_SIZE_PX}px, 10vw, ${CASE_CARD_MAX_SIZE_PX}px)`
+
+const selectedLabel = computed(
+  () =>
+    `${pluralizeUk(store.selectedCases.length, [
+      t('common.plural.case.one'),
+      t('common.plural.case.few'),
+      t('common.plural.case.many'),
+    ])} ${t('ollSelector.selectedSuffix')}`,
+)
 
 function done() {
   if (panel.value) panel.value.open = false
@@ -25,7 +36,7 @@ function done() {
     ref="panel"
     :default-open="store.selectedCases.length === 0"
     :count="store.selectedCases.length"
-    :label="`${pluralCases(store.selectedCases.length)} обрано`"
+    :label="selectedLabel"
   >
     <div class="groups">
       <div v-for="group in ollGroups" :key="group.name" class="group">
@@ -51,8 +62,8 @@ function done() {
     </div>
 
     <div class="selector-footer">
-      <AppButton @click="store.clearSelection()">Скинути</AppButton>
-      <AppButton variant="primary" @click="done">Готово</AppButton>
+      <AppButton @click="store.clearSelection()">{{ t('ollSelector.clearButton') }}</AppButton>
+      <AppButton variant="primary" @click="done">{{ t('ollSelector.doneButton') }}</AppButton>
     </div>
   </CollapsiblePanel>
 </template>

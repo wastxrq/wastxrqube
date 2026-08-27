@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { LanguageSwitcher, ThemeToggle } from '@/components'
 import { LogoBoldIcon } from '@/components/icons'
+import { useI18n } from 'vue-i18n'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 
 const router = useRouter()
+const { t } = useI18n()
 const tabs = router.options.routes
-  .filter((route) => route.meta?.label)
-  .map((route) => ({ to: route.path, label: route.meta!.label! }))
+  .filter((route) => route.meta?.labelKey)
+  .map((route) => ({ to: route.path, labelKey: route.meta!.labelKey! }))
 </script>
 
 <template>
@@ -15,17 +18,22 @@ const tabs = router.options.routes
         <LogoBoldIcon class="brand-mark" />
       </RouterLink>
 
-      <nav class="tabs">
-        <RouterLink
-          v-for="tab in tabs"
-          :key="tab.to"
-          :to="tab.to"
-          class="tab"
-          active-class="tab-active"
-        >
-          {{ tab.label }}
-        </RouterLink>
-      </nav>
+      <div class="nav-cluster">
+        <nav class="tabs">
+          <RouterLink
+            v-for="tab in tabs"
+            :key="tab.to"
+            :to="tab.to"
+            class="tab"
+            active-class="tab-active"
+          >
+            {{ t(tab.labelKey) }}
+          </RouterLink>
+        </nav>
+
+        <LanguageSwitcher />
+        <ThemeToggle />
+      </div>
     </header>
 
     <main class="content">
@@ -58,6 +66,12 @@ const tabs = router.options.routes
   height: 28px;
   width: auto;
   color: var(--accent);
+}
+
+.nav-cluster {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .tabs {
@@ -99,13 +113,27 @@ const tabs = router.options.routes
     flex-direction: column;
     align-items: flex-start;
   }
-  .tabs {
+  .nav-cluster {
     width: 100%;
+    gap: 8px;
+  }
+  .language-switcher,
+  .theme-toggle {
+    flex-shrink: 0;
+  }
+  .tabs {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
   }
   .tab {
-    flex: 1;
-    text-align: center;
-    padding: 8px 6px;
+    flex: none;
+    white-space: nowrap;
+    padding: 8px 14px;
     font-size: 0.82rem;
   }
 }

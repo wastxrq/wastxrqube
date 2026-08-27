@@ -1,88 +1,56 @@
 <script setup lang="ts">
 import { F2lCaseBrowser } from '@/components'
 import { CollapsiblePanel } from '@/components/CollapsiblePanel'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const links = [
-  {
-    title: 'J Perm — F2L (гайд CFOP)',
-    url: 'https://jperm.net/3x3/cfop/f2l',
-    note: 'Письмовий розбір інтуїтивного F2L, поради та аркуш алгоритмів.',
-  },
-  {
-    title: 'J Perm — найкращі алгоритми F2L (PDF)',
-    url: 'https://jperm.net/algs/f2l',
-    note: 'Аркуш алгоритмів для довідки, коли кейси вже зрозумілі інтуїтивно.',
-  },
-  {
-    title: 'J Perm на YouTube',
-    url: 'https://www.youtube.com/@jperm',
-    note: 'Відеорозбори, включно із серією про F2L та передбачення (look-ahead).',
-  },
+  { key: 'jperm', url: 'https://jperm.net/3x3/cfop/f2l' },
+  { key: 'jpermPdf', url: 'https://jperm.net/algs/f2l' },
+  { key: 'jpermYoutube', url: 'https://www.youtube.com/@jperm' },
 ]
 </script>
 
 <template>
   <div>
-    <h1>F2L Guide</h1>
+    <h1>{{ t('f2l.title') }}</h1>
 
-    <CollapsiblePanel :default-open="true" label="Гайд з F2L">
+    <CollapsiblePanel :default-open="true" :label="t('f2l.guideLabel')">
       <div class="guide">
         <section class="intro">
-          <h2>F2L — Перші два шари</h2>
-          <p>
-            F2L замінює новачківський крок «розв'язувати ребра середнього шару по одному» на дещо
-            набагато швидше: об'єднання кута з відповідним ребром і встановлення їх на місце разом.
-            Зроблений добре, цей етап зазвичай займає найбільшу частину часу розв'язання методом
-            CFOP — тому це і найбільше місце для приросту швидкості.
-          </p>
+          <h2>{{ t('f2l.introHeading') }}</h2>
+          <p>{{ t('f2l.introBody') }}</p>
         </section>
 
         <section>
-          <h3>Основна ідея</h3>
-          <p>
-            Після хреста чотири пари кут-ребро потрібно встановити в останні чотири пази. Замість
-            розв'язування їх як окремих деталей, знайдіть кут і ребро, що мають два спільні кольори,
-            об'єднайте їх у пару, використовуючи верхній шар як вільний простір, і вставте пару в її
-            паз одним рухом. Більшість кейсів взагалі не потребують завченого алгоритму — вони
-            випливають із розуміння невеликого набору повторюваних рухів (це і мають на увазі J Perm
-            та більшість швидкісних кубічників під «інтуїтивним F2L»).
-          </p>
+          <h3>{{ t('f2l.coreIdeaHeading') }}</h3>
+          <p>{{ t('f2l.coreIdeaBody') }}</p>
         </section>
 
         <section>
-          <h3>Як дійсно стати швидшим</h3>
+          <h3>{{ t('f2l.speedHeading') }}</h3>
           <ul>
             <li>
-              <strong>Спочатку вивчіть це інтуїтивно.</strong> Приділіть час розумінню, чому пара
-              збирається і встановлюється саме так, перш ніж братися за аркуш алгоритмів. Алгоритми
-              без розуміння розсипаються, щойно кейс виглядає трохи інакше, ніж на картинці.
+              <strong>{{ t('f2l.speedTip1Title') }}</strong> {{ t('f2l.speedTip1Body') }}
             </li>
             <li>
-              <strong>Уникайте обертань кубика.</strong> Кожне обертання коштує часу на
-              розпізнавання. Навчіться відстежувати деталі відносно граней R і F, не обертаючи весь
-              хват.
+              <strong>{{ t('f2l.speedTip2Title') }}</strong> {{ t('f2l.speedTip2Body') }}
             </li>
             <li>
-              <strong>Дивіться наперед.</strong> Поки завершуєте хрест, шукайте поглядом першу пару.
-              Поки вставляєте одну пару, вже відстежуйте наступну. Це найбільший важіль для реальної
-              швидкості розв'язання, більший за будь-яку заміну алгоритму.
+              <strong>{{ t('f2l.speedTip3Title') }}</strong> {{ t('f2l.speedTip3Body') }}
             </li>
             <li>
-              <strong>Використовуйте алгоритми як допоміжні колеса.</strong> Коли ваші інтуїтивні
-              рішення стабільні (поширений орієнтир — розв'язання менш ніж за 15 секунд), аркуші
-              алгоритмів F2L стають корисними — для оптимізації незручних кейсів і вставок у задні
-              пази, а не для вивчення етапу з нуля.
+              <strong>{{ t('f2l.speedTip4Title') }}</strong> {{ t('f2l.speedTip4Body') }}
             </li>
             <li>
-              <strong>Хороше ребро / погане ребро.</strong> Навчіться визначати, чи наліпка кольору
-              хреста на деталі показана зверху чи збоку — це змінює, який підготовчий рух збере пару
-              без подвійного перевертання ребра.
+              <strong>{{ t('f2l.speedTip5Title') }}</strong> {{ t('f2l.speedTip5Body') }}
             </li>
           </ul>
         </section>
 
         <section class="links">
-          <h3>Ресурси</h3>
+          <h3>{{ t('f2l.resourcesHeading') }}</h3>
           <div class="link-list">
             <a
               v-for="l in links"
@@ -92,15 +60,15 @@ const links = [
               rel="noopener"
               class="link-card"
             >
-              <span class="link-title">{{ l.title }} ↗</span>
-              <span class="link-note">{{ l.note }}</span>
+              <span class="link-title">{{ t(`f2l.resources.${l.key}.title`) }} ↗</span>
+              <span class="link-note">{{ t(`f2l.resources.${l.key}.note`) }}</span>
             </a>
           </div>
         </section>
       </div>
     </CollapsiblePanel>
 
-    <h2 class="browser-heading">Довідник кейсів</h2>
+    <h2 class="browser-heading">{{ t('f2l.browserHeading') }}</h2>
     <F2lCaseBrowser />
   </div>
 </template>

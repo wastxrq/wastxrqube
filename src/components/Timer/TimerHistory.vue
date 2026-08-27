@@ -1,16 +1,26 @@
 <script setup lang="ts">
 import { AppButton } from '@/components/AppButton'
 import { CollapsiblePanel } from '@/components/CollapsiblePanel'
-import { effectiveTime, formatTime, pluralSolves } from '@/lib'
+import { effectiveTime, formatTime, pluralizeUk } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
 import type { Solve } from '@/types'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import SolveDetailModal from './SolveDetailModal.vue'
 
 const store = useTimerSessionsStore()
+const { t } = useI18n()
 const newSessionName = ref('')
 const addingSession = ref(false)
 const selectedSolve = ref<Solve | null>(null)
+
+const solvesLabel = computed(() =>
+  pluralizeUk(store.solves.length, [
+    t('common.plural.solve.one'),
+    t('common.plural.solve.few'),
+    t('common.plural.solve.many'),
+  ]),
+)
 
 function submitNewSession() {
   if (!newSessionName.value.trim()) return
@@ -24,7 +34,7 @@ function submitNewSession() {
   <CollapsiblePanel
     :default-open="false"
     :count="store.solves.length"
-    :label="`${pluralSolves(store.solves.length)} · ${store.activeSessionName}`"
+    :label="`${solvesLabel} · ${store.activeSessionName}`"
   >
     <div class="sessions">
       <div
@@ -40,7 +50,7 @@ function submitNewSession() {
         <button
           v-if="store.sessions.length > 1"
           class="pill-delete"
-          title="Видалити сесію"
+          :title="t('timerHistory.deleteSessionTitle')"
           @click="store.deleteSession(session.name)"
         >
           ✕
@@ -53,17 +63,17 @@ function submitNewSession() {
       <div v-else class="session-add">
         <input
           v-model="newSessionName"
-          placeholder="Назва сесії"
+          :placeholder="t('timerHistory.sessionNamePlaceholder')"
           autofocus
           @keyup.enter="submitNewSession"
           @keyup.esc="addingSession = false"
         />
-        <AppButton @click="submitNewSession">Додати</AppButton>
+        <AppButton @click="submitNewSession">{{ t('timerHistory.addButton') }}</AppButton>
       </div>
     </div>
 
     <p v-if="store.solves.length === 0" class="hint">
-      Ще немає розв'язків — утримуйте Space, щоб почати.
+      {{ t('timerHistory.emptyState') }}
     </p>
     <div v-else class="solve-list">
       <div

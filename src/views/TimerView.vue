@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CubeNet, StatsPanel, TimerHistory } from '@/components'
+import { CubeNet, PageSection, StatsPanel, TimerHistory } from '@/components'
 import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer } from '@/composables'
 import { INSPECTION_MS } from '@/constants'
@@ -7,6 +7,9 @@ import { randomScramble, scrambledFacelets } from '@/cube'
 import { effectiveTime, formatTime } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const store = useTimerSessionsStore()
 const scramble = ref(randomScramble())
@@ -50,9 +53,7 @@ const displayText = computed(() =>
 )
 
 const hintText = computed(() =>
-  timer.state.value === 'inspecting'
-    ? "Space — почати розв'язання"
-    : "Space — старт/стоп · Delete/Backspace — видалити останній розв'язок",
+  timer.state.value === 'inspecting' ? t('timer.hintInspecting') : t('timer.hintIdle'),
 )
 
 function newScramble() {
@@ -92,9 +93,9 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <h1>Timer</h1>
+    <h1>{{ t('timer.title') }}</h1>
 
-    <div class="practice panel">
+    <PageSection class="practice">
       <ScrambleRow
         class="scramble-slot"
         :scramble="scramble"
@@ -134,7 +135,7 @@ onUnmounted(() => {
           <StatsPanel />
         </div>
       </div>
-    </div>
+    </PageSection>
 
     <TimerHistory />
   </div>
@@ -142,13 +143,11 @@ onUnmounted(() => {
 
 <style scoped>
 .practice {
-  padding: 36px 28px;
   display: grid;
   grid-template-rows: 1fr auto 1fr;
   align-items: center;
   justify-items: center;
   min-height: 680px;
-  margin-bottom: 20px;
 }
 .scramble-slot {
   align-self: start;
@@ -214,16 +213,19 @@ onUnmounted(() => {
   max-width: 320px;
 }
 
+@media (max-width: 560px) {
+  .practice {
+    min-height: 0;
+    grid-template-rows: auto auto auto;
+  }
+}
+
 @media (max-width: 480px) {
   .bottom-row {
-    grid-template-columns: 1fr;
-    justify-items: center;
+    gap: 16px;
   }
   .net-panel {
-    max-width: 200px;
-  }
-  .stats-slot {
-    justify-self: center;
+    max-width: 150px;
   }
 }
 </style>

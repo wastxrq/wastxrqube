@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { formatTime } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
+import { useI18n } from 'vue-i18n'
 
 const store = useTimerSessionsStore()
+const { t } = useI18n()
 </script>
 
 <template>
@@ -20,11 +22,11 @@ const store = useTimerSessionsStore()
       <div class="value">{{ store.ao100 !== null ? formatTime(store.ao100) : '–' }}</div>
     </div>
     <div class="stat">
-      <div class="label">mean</div>
+      <div class="label">{{ t('stats.mean') }}</div>
       <div class="value">{{ store.meanTime !== null ? formatTime(store.meanTime) : '–' }}</div>
     </div>
     <div class="stat stat-full">
-      <div class="label">best</div>
+      <div class="label">{{ t('stats.best') }}</div>
       <div class="value">{{ store.bestTime !== null ? formatTime(store.bestTime) : '–' }}</div>
     </div>
   </div>
@@ -59,5 +61,18 @@ const store = useTimerSessionsStore()
   font-family: var(--font-mono);
   font-size: 1.15rem;
   margin-top: 2px;
+}
+
+@media (max-width: 480px) {
+  .stats-panel {
+    gap: 8px 12px;
+    padding: 12px 14px;
+  }
+  .stat .label {
+    font-size: 0.7rem;
+  }
+  .stat .value {
+    font-size: 0.85rem;
+  }
 }
 </style>

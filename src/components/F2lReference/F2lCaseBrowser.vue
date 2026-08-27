@@ -2,21 +2,29 @@
 import { CollapsiblePanel } from '@/components/CollapsiblePanel'
 import { caseFaceletsForAlg } from '@/cube/engine'
 import { f2lCases, f2lGroups } from '@/data/f2l'
-import { pluralCases } from '@/lib/pluralize'
+import { pluralizeUk } from '@/lib/pluralize'
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import F2lReferenceCard from './F2lReferenceCard.vue'
 
+const { t } = useI18n()
 const totalCases = Object.keys(f2lCases).length
+
+const label = computed(
+  () =>
+    `${pluralizeUk(totalCases, [
+      t('common.plural.case.one'),
+      t('common.plural.case.few'),
+      t('common.plural.case.many'),
+    ])} ${t('f2lBrowser.labelSuffix')}`,
+)
 </script>
 
 <template>
-  <CollapsiblePanel
-    :default-open="false"
-    :count="totalCases"
-    :label="`${pluralCases(totalCases)} F2L`"
-  >
+  <CollapsiblePanel :default-open="false" :count="totalCases" :label="label">
     <div class="groups">
-      <div v-for="group in f2lGroups" :key="group.name" class="group">
-        <div class="group-head">{{ group.name }}</div>
+      <div v-for="group in f2lGroups" :key="group.labelKey" class="group">
+        <div class="group-head">{{ t(group.labelKey) }}</div>
         <div class="cards">
           <F2lReferenceCard
             v-for="id in group.cases"

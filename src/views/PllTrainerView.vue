@@ -1,16 +1,26 @@
 <script setup lang="ts">
-import { PllCaseDiagram, PllCaseSelector, PllCaseStats } from '@/components'
+import { PageSection, PllCaseDiagram, PllCaseSelector, PllCaseStats } from '@/components'
 import { AppButton } from '@/components/AppButton'
 import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer } from '@/composables'
 import { RESULT_DISPLAY_DELAY_MS } from '@/constants'
 import { caseFaceletsForAlg } from '@/cube'
 import { pllCases } from '@/data/pll'
-import { formatTime, pluralCases } from '@/lib'
+import { formatTime, pluralizeUk } from '@/lib'
 import { usePllPracticeStore } from '@/stores'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const store = usePllPracticeStore()
+const { t } = useI18n()
+
+const recapWord = computed(() =>
+  pluralizeUk(store.recapQueue.length, [
+    t('common.plural.case.one'),
+    t('common.plural.case.few'),
+    t('common.plural.case.many'),
+  ]),
+)
 
 const hasSelection = computed(() => store.selectedCases.length > 0)
 const currentCase = computed(() =>
@@ -90,17 +100,14 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <h1>PLL Practice</h1>
+    <h1>{{ t('pll.title') }}</h1>
 
     <PllCaseSelector />
 
-    <div class="practice panel">
+    <PageSection class="practice">
       <div v-if="store.mode === 'recap'" class="recap-banner">
-        <span
-          >Recap: залишилось {{ store.recapQueue.length }}
-          {{ pluralCases(store.recapQueue.length) }}, де було повільно</span
-        >
-        <AppButton @click="exitRecap">Вийти</AppButton>
+        <span>{{ t('pll.recapBanner', { n: store.recapQueue.length, word: recapWord }) }}</span>
+        <AppButton @click="exitRecap">{{ t('pll.exitRecap') }}</AppButton>
       </div>
 
       <template v-if="hasSelection && currentCase">
@@ -116,13 +123,13 @@ onUnmounted(() => {
         <div class="timer-display" :style="{ color: timerColor }">
           {{ formatTime(timer.elapsed.value) }}
         </div>
-        <p class="hint">Space — старт/стоп · Delete/Backspace — видалити останній результат</p>
+        <p class="hint">{{ t('pll.hint') }}</p>
 
         <div class="practice-actions">
           <AppButton @click="revealed = !revealed">
-            {{ revealed ? 'Сховати алгоритм' : 'Показати алгоритм' }}
+            {{ revealed ? t('pll.hideAlg') : t('pll.showAlg') }}
           </AppButton>
-          <AppButton @click="skip">Пропустити →</AppButton>
+          <AppButton @click="skip">{{ t('pll.skip') }}</AppButton>
         </div>
         <div v-if="revealed" class="algs">
           <code v-for="(a, i) in currentCase.algs" :key="i">{{ a }}</code>
@@ -130,15 +137,15 @@ onUnmounted(() => {
 
         <div class="stats-row">
           <div class="stat">
-            <div class="label">розв'язано</div>
+            <div class="label">{{ t('pll.statSolved') }}</div>
             <div class="value">{{ store.solvedCount }}</div>
           </div>
           <div class="stat">
-            <div class="label">найкращий</div>
+            <div class="label">{{ t('pll.statBest') }}</div>
             <div class="value">{{ store.best !== null ? formatTime(store.best) : '–' }}</div>
           </div>
           <div class="stat">
-            <div class="label">середній</div>
+            <div class="label">{{ t('pll.statMean') }}</div>
             <div class="value">
               {{ store.recentMean !== null ? formatTime(store.recentMean) : '–' }}
             </div>
@@ -148,13 +155,13 @@ onUnmounted(() => {
             class="stat recap-stat"
             @click="store.startRecap()"
           >
-            <div class="value">Recap ({{ store.recapCandidateCount }})</div>
+            <div class="value">{{ t('pll.recapButton', { n: store.recapCandidateCount }) }}</div>
           </button>
         </div>
       </template>
 
-      <p v-else class="hint empty-state">Оберіть кейси вище, щоб почати практику</p>
-    </div>
+      <p v-else class="hint empty-state">{{ t('pll.emptyState') }}</p>
+    </PageSection>
 
     <PllCaseStats />
   </div>
@@ -162,12 +169,10 @@ onUnmounted(() => {
 
 <style scoped>
 .practice {
-  padding: 36px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  margin-bottom: 20px;
 }
 .empty-state {
   padding: 20px 0;
@@ -277,5 +282,14 @@ onUnmounted(() => {
 .main-diagram {
   width: 180px;
   height: 180px;
+}
+
+@media (max-width: 560px) {
+  .scramble-slot {
+    margin-bottom: 32px;
+  }
+  .practice-actions {
+    margin-top: 32px;
+  }
 }
 </style>
