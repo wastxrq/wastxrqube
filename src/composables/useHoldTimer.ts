@@ -125,5 +125,21 @@ export function useHoldTimer({
     pointerDown = false
   }
 
-  return { state, elapsed, inspectionElapsed, armed, press, release, reset }
+  /**
+   * Backs out of inspection with no solve logged and no penalty — a no-op from
+   * any other state, since only 'inspecting' has a pending attempt worth
+   * discarding (a 'running' solve stops via press()/Space, per existing behavior).
+   */
+  function cancel() {
+    if (state.value !== 'inspecting') return
+    if (holdTimer) clearTimeout(holdTimer)
+    cancelAnimationFrame(inspectionRafId)
+    armed.value = false
+    pointerDown = false
+    state.value = 'idle'
+    elapsed.value = 0
+    inspectionElapsed.value = 0
+  }
+
+  return { state, elapsed, inspectionElapsed, armed, press, release, reset, cancel }
 }
