@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AppButton } from '@/components/AppButton'
-import { caseFaceletsForAlg } from '@/cube/engine'
+import { canonicalPllCaseFacelets } from '@/cube/engine'
 import { pllCases, pllGroups } from '@/data/pll'
 import { pluralizeUk } from '@/lib/pluralize'
 import { usePllPracticeStore } from '@/stores/pllPractice'
@@ -55,7 +55,7 @@ function done() {
             :selected="store.isSelected(id)"
             @click="store.toggleCase(id)"
           >
-            <PllCaseDiagram :facelets="caseFaceletsForAlg(pllCases[id]!.algs[0]!)" />
+            <PllCaseDiagram :facelets="canonicalPllCaseFacelets(pllCases[id]!.algs[0]!)" />
           </CaseCard>
         </div>
       </div>
