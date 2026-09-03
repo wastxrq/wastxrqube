@@ -11,11 +11,18 @@ function close() {
   emit('close')
 }
 
+// Captured (not bubbled) so this reaches window before any other page-level
+// Escape handler (e.g. TimerView's inspection-cancel) — capture always runs
+// before bubble, regardless of which listener happened to register first —
+// and stopImmediatePropagation keeps this modal's Escape from also triggering
+// whatever's underneath it once it actually closes something.
 function onKeydown(e: KeyboardEvent) {
-  if (props.open && e.key === 'Escape') close()
+  if (!props.open || e.key !== 'Escape') return
+  e.stopImmediatePropagation()
+  close()
 }
-onMounted(() => window.addEventListener('keydown', onKeydown))
-onUnmounted(() => window.removeEventListener('keydown', onKeydown))
+onMounted(() => window.addEventListener('keydown', onKeydown, true))
+onUnmounted(() => window.removeEventListener('keydown', onKeydown, true))
 </script>
 
 <template>
