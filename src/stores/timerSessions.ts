@@ -1,21 +1,21 @@
-import { defineStore } from 'pinia'
-import { computed, ref, watch } from 'vue'
 import {
-  AO5_WINDOW,
-  AO12_WINDOW,
   AO100_WINDOW,
+  AO12_WINDOW,
+  AO5_WINDOW,
   DEFAULT_SESSION_NAME,
-  TIMER_SESSIONS_STORAGE_KEY,
+  LOCAL_STORAGE_KEYS,
 } from '@/constants'
 import { average, best, loadJson, mean, saveJson } from '@/lib'
 import type { PersistedTimerState, SolvePenalty, TimerSession } from '@/types'
+import { defineStore } from 'pinia'
+import { computed, ref, watch } from 'vue'
 
 function defaultSessions(): TimerSession[] {
   return [{ name: DEFAULT_SESSION_NAME, solves: [] }]
 }
 
 export const useTimerSessionsStore = defineStore('timerSessions', () => {
-  const persisted = loadJson<PersistedTimerState>(TIMER_SESSIONS_STORAGE_KEY, {
+  const persisted = loadJson<PersistedTimerState>(LOCAL_STORAGE_KEYS.TIMER_SESSIONS_STORAGE_KEY, {
     activeSessionName: DEFAULT_SESSION_NAME,
     sessions: defaultSessions(),
   })
@@ -27,7 +27,7 @@ export const useTimerSessionsStore = defineStore('timerSessions', () => {
   watch(
     [sessions, activeSessionName],
     () =>
-      saveJson(TIMER_SESSIONS_STORAGE_KEY, {
+      saveJson(LOCAL_STORAGE_KEYS.TIMER_SESSIONS_STORAGE_KEY, {
         sessions: sessions.value,
         activeSessionName: activeSessionName.value,
       }),

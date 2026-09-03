@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ChevronIcon } from '@/components/icons'
-import { LOCALE_STORAGE_KEY } from '@/constants'
+import { LOCAL_STORAGE_KEYS } from '@/constants'
 import type { Locale } from '@/i18n'
 import { saveJson } from '@/lib/storage'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-// Native codes, shown regardless of the current UI language — a language
-// picker's own options aren't translated content, same as OLL/PLL case names.
 const LOCALES: { code: Locale; label: string }[] = [
   { code: 'uk', label: 'UA' },
   { code: 'en', label: 'EN' },
@@ -22,7 +20,7 @@ const currentLabel = computed(() => LOCALES.find((l) => l.code === locale.value)
 
 function select(code: Locale) {
   locale.value = code
-  saveJson(LOCALE_STORAGE_KEY, code)
+  saveJson(LOCAL_STORAGE_KEYS.LOCALE_STORAGE_KEY, code)
   open.value = false
 }
 
