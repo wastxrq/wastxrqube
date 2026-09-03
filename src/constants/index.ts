@@ -1,4 +1,5 @@
 export * from './cube'
+export * from './lastLayerDiagram.constant'
 export * from './storage'
 export * from './timer'
 export * from './ui'
