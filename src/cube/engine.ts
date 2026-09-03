@@ -36,6 +36,71 @@ export function caseFaceletsForAlg(alg: string): string {
   return facelets
 }
 
+const pllFaceletsCache = new Map<string, string>()
+
+// cubejs's own corner/edge indices 0-3 are exactly URF/UFL/ULB/UBR and UR/UF/UL/UB
+// (see cube.js's own [URF, UFL, ULB, UBR, ...] / [UR, UF, UL, UB, ...] index tables) —
+// i.e. the last layer's 4 corners and 4 edges, with index === solved position.
+const LAST_LAYER_PIECE_INDICES = [0, 1, 2, 3]
+const AUF_CORRECTIONS = ['U', 'U2', "U'"]
+
+/** Corner/edge counts of last-layer pieces displaced from their solved slot. */
+function displacedPieceCounts(c: InstanceType<typeof Cube>): { corner: number; edge: number } {
+  let corner = 0
+  let edge = 0
+  for (const i of LAST_LAYER_PIECE_INDICES) {
+    if (c.cp[i] !== i) corner++
+    if (c.ep[i] !== i) edge++
+  }
+  return { corner, edge }
+}
+
+/**
+ * Like caseFaceletsForAlg, but additionally normalizes away any leftover AUF: some
+ * PLL algorithms have a net whole-U-layer rotation baked into their own move count
+ * that caseFaceletsForAlg's upright() doesn't undo (upright only fixes which face
+ * is F/U, not U-layer spin). Left uncorrected, a handful of cases (Jb, Ra, Rb, Z in
+ * this project's data) render with pieces that look like they cycle but don't — e.g.
+ * Z showing all 4 corners in a rotated 4-cycle instead of fixed, contradicting its
+ * own "Edges Only" category. Trying all 4 AUF angles and keeping whichever leaves
+ * the fewest last-layer pieces displaced recovers each case's true, minimal shape.
+ *
+ * Total displaced piece count alone doesn't always pick a unique angle: the G perms
+ * tie at 6 pieces displaced between a corner-2-swap + edge-4-cycle split and a
+ * corner-3-cycle + edge-3-cycle split (verified against cubejs's raw cp/ep for every
+ * AUF angle on Ga/Gb/Gc/Gd — both splits sum to 6, only the 3+3 split matches the
+ * standard reference-sheet "double 3-cycle" G perm diagram). Preferring the more
+ * balanced corner/edge split as a tiebreak resolves that without affecting any other
+ * PLL case (checked against every case in src/data/pll.ts: the tiebreak only ever
+ * changes which of several equally-minimal angles is picked, never picks a worse one).
+ */
+export function canonicalPllCaseFacelets(alg: string): string {
+  const clean = normalizeAlg(alg)
+  const cached = pllFaceletsCache.get(clean)
+  if (cached) return cached
+
+  const base = Cube.fromString(caseFaceletsForAlg(alg))
+  let best = base
+  const bestCounts = displacedPieceCounts(base)
+  let bestTotal = bestCounts.corner + bestCounts.edge
+  let bestImbalance = Math.abs(bestCounts.corner - bestCounts.edge)
+  for (const auf of AUF_CORRECTIONS) {
+    const rotated = base.clone()
+    rotated.move(auf)
+    const counts = displacedPieceCounts(rotated)
+    const total = counts.corner + counts.edge
+    const imbalance = Math.abs(counts.corner - counts.edge)
+    if (total < bestTotal || (total === bestTotal && imbalance < bestImbalance)) {
+      best = rotated
+      bestTotal = total
+      bestImbalance = imbalance
+    }
+  }
+  const facelets = best.asString()
+  pllFaceletsCache.set(clean, facelets)
+  return facelets
+}
+
 // How a move token transforms under a whole-cube rotation, keyed by rotation
 // label then by the token being resolved (e.g. ROTATION_REMAP.y.R === 'B'
 // means "R" performed after a "y" rotation has the same effect as plain "B").
