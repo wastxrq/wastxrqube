@@ -1,5 +1,6 @@
 export * from './button'
 export * from './cube'
+export * from './diagram'
 export * from './f2l'
 export * from './hotkey'
 export * from './oll'
