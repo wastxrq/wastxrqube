@@ -66,12 +66,20 @@ useDeleteHotkey({
 })
 
 function onWindowKeydown(e: KeyboardEvent) {
-  if (e.code !== 'Space') return
+  if (e.code !== 'Space' && e.key !== 'Escape') return
 
   if (['INPUT', 'TEXTAREA'].includes((document.activeElement as HTMLElement | null)?.tagName ?? ''))
     return
-  e.preventDefault()
-  timer.press()
+
+  if (e.code === 'Space') {
+    e.preventDefault()
+    timer.press()
+    return
+  }
+
+  // A BaseModal open at the same time swallows Escape first (capture-phase,
+  // see BaseModal.vue) so this never fires underneath an open modal.
+  timer.cancel()
 }
 
 function onWindowKeyup(e: KeyboardEvent) {
