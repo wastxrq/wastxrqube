@@ -10,6 +10,13 @@ export interface UseHoldTimerOptions {
   onComplete?: (ms: number, penalty: SolvePenalty) => void
 }
 
+export interface UseHoldTimerInputOptions {
+  /** Extra guard checked only when about to start a fresh hold (state === 'idle'), e.g. "a case is selected". */
+  canStart?: () => boolean
+  /** Wires Escape to this if provided (only the main Timer's inspection phase uses it); omitted elsewhere. */
+  onCancelKey?: () => void
+}
+
 export interface CaseAttempt<TId extends string | number = string | number> {
   caseId: TId
   ms: number | null // null = skipped, no time logged
