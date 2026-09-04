@@ -22,7 +22,10 @@
   "timer": {
     "title": "Timer",
     "hintIdle": "Space — start/stop · Delete/Backspace — delete last solve",
-    "hintInspecting": "Space — start solving"
+    "hintIdleTouch": "Hold the timer to start",
+    "hintInspecting": "Space — start solving",
+    "hintInspectingTouch": "Hold the timer to start solving",
+    "swipeCancelHint": "Swipe right to cancel →"
   },
   "stats": {
     "mean": "mean",
@@ -36,6 +39,8 @@
     "hideAlg": "Hide algorithm",
     "skip": "Skip →",
     "hint": "Space — start/stop · Delete/Backspace — delete last result",
+    "hintTouch": "Hold the timer to start",
+    "undoButton": "Undo last",
     "statSolved": "solved",
     "statBest": "best",
     "statMean": "mean",
@@ -59,6 +64,8 @@
     "hideAlg": "Hide algorithm",
     "skip": "Skip →",
     "hint": "Space — start/stop · Delete/Backspace — delete last result",
+    "hintTouch": "Hold the timer to start",
+    "undoButton": "Undo last",
     "statSolved": "solved",
     "statBest": "best",
     "statMean": "mean",
