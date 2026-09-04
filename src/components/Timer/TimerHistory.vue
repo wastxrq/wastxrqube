@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { AppButton } from '@/components/AppButton'
 import { CollapsiblePanel } from '@/components/CollapsiblePanel'
+import { useInputMethod } from '@/composables'
 import { effectiveTime, formatTime, pluralizeUk } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
 import type { Solve } from '@/types'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SolveDetailModal from './SolveDetailModal.vue'
+
+const { isTouch } = useInputMethod()
 
 const store = useTimerSessionsStore()
 const { t } = useI18n()
@@ -80,6 +83,7 @@ function submitNewSession() {
         v-for="(solve, i) in [...store.solves].reverse()"
         :key="solve.date"
         class="solve-row"
+        :class="{ 'is-touch': isTouch }"
         @click="selectedSolve = solve"
       >
         <span class="solve-idx">{{ store.solves.length - i }}</span>
@@ -199,7 +203,10 @@ function submitNewSession() {
 .solve-row:hover {
   background: var(--panel-2);
 }
-.solve-row:hover .solve-actions {
+.solve-row:hover .solve-actions,
+/* No :hover on touch, so these quick actions (a shortcut past opening the
+   detail modal — tapping the row still works too) stay visible outright. */
+.solve-row.is-touch .solve-actions {
   display: flex;
 }
 .solve-idx {
@@ -226,6 +233,9 @@ function submitNewSession() {
   border-radius: 4px;
   font-size: 0.7rem;
   padding: 2px 7px;
+}
+.solve-row.is-touch .solve-actions button {
+  padding: 6px 10px;
 }
 .solve-actions button:hover {
   color: var(--text);
