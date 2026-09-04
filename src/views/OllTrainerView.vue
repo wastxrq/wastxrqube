@@ -2,17 +2,18 @@
 import { OllCaseDiagram, OllCaseSelector, OllCaseStats, PageSection } from '@/components'
 import { AppButton } from '@/components/AppButton'
 import { ScrambleRow } from '@/components/ScrambleRow'
-import { useDeleteHotkey, useHoldTimer } from '@/composables'
+import { useDeleteHotkey, useHoldTimer, useHoldTimerInput, useInputMethod } from '@/composables'
 import { RESULT_DISPLAY_DELAY_MS } from '@/constants'
 import { caseFaceletsForAlg } from '@/cube'
 import { ollCases } from '@/data/oll'
 import { formatTime, pluralizeUk } from '@/lib'
 import { useOllPracticeStore } from '@/stores'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const store = useOllPracticeStore()
 const { t } = useI18n()
+const { isTouch } = useInputMethod()
 
 const recapWord = computed(() =>
   pluralizeUk(store.recapQueue.length, [
@@ -70,31 +71,14 @@ useDeleteHotkey({
   onDelete: () => store.removeLastAttempt(),
 })
 
-function onWindowKeydown(e: KeyboardEvent) {
-  if (e.code !== 'Space') return
-  if (['INPUT', 'TEXTAREA'].includes((document.activeElement as HTMLElement | null)?.tagName ?? ''))
-    return
-  if (!hasSelection.value) return
-  e.preventDefault()
-  timer.press()
-}
+const { onPointerDown, onPointerUp, onPointerCancel } = useHoldTimerInput(timer, {
+  canStart: () => hasSelection.value,
+})
 
-function onWindowKeyup(e: KeyboardEvent) {
-  if (e.code !== 'Space') return
-  if (!hasSelection.value) return
-  e.preventDefault()
-  timer.release()
-}
+const hintText = computed(() => (isTouch.value ? t('oll.hintTouch') : t('oll.hint')))
 
 onMounted(() => {
   ensureCurrentCase()
-  window.addEventListener('keydown', onWindowKeydown)
-  window.addEventListener('keyup', onWindowKeyup)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', onWindowKeydown)
-  window.removeEventListener('keyup', onWindowKeyup)
 })
 </script>
 
@@ -120,16 +104,26 @@ onUnmounted(() => {
         <div class="case-id">OLL {{ store.currentCaseId }}</div>
         <div class="case-name">{{ currentCase.name }}</div>
 
-        <div class="timer-display" :style="{ color: timerColor }">
-          {{ formatTime(timer.elapsed.value) }}
+        <div
+          class="timer-touch-zone"
+          @pointerdown="onPointerDown"
+          @pointerup="onPointerUp"
+          @pointercancel="onPointerCancel"
+        >
+          <div class="timer-display" :style="{ color: timerColor }">
+            {{ formatTime(timer.elapsed.value) }}
+          </div>
+          <p class="hint">{{ hintText }}</p>
         </div>
-        <p class="hint">{{ t('oll.hint') }}</p>
 
         <div class="practice-actions">
           <AppButton @click="revealed = !revealed">
             {{ revealed ? t('oll.hideAlg') : t('oll.showAlg') }}
           </AppButton>
           <AppButton @click="skip">{{ t('oll.skip') }}</AppButton>
+          <AppButton :disabled="timer.state.value === 'running'" @click="store.removeLastAttempt()">
+            {{ t('oll.undoButton') }}
+          </AppButton>
         </div>
         <div v-if="revealed" class="algs">
           <code v-for="(a, i) in currentCase.algs" :key="i">{{ a }}</code>
@@ -205,6 +199,17 @@ onUnmounted(() => {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.2rem;
+}
+.timer-touch-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 24px;
+  /* Large tap-and-hold target for touch/pen — see useHoldTimerInput. Blocks the
+     browser's own touch gestures (scroll, double-tap zoom, text selection) so a
+     hold isn't interrupted or misread as a page gesture. */
+  touch-action: none;
+  user-select: none;
 }
 .timer-display {
   font-family: var(--font-mono);
