@@ -55,8 +55,8 @@ const { t } = useI18n()
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   background: var(--panel-2);
   border: 1px solid var(--border);
