@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { CollapsiblePanel } from '@/components/CollapsiblePanel'
-import { caseFaceletsForAlg } from '@/cube/engine'
 import { f2lCases, f2lGroups } from '@/data/f2l'
 import { pluralizeUk } from '@/lib/pluralize'
+import { f2lCaseDisplayFacelets } from '@/utils'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import F2lReferenceCard from './F2lReferenceCard.vue'
@@ -31,7 +31,7 @@ const label = computed(
             :key="id"
             :name="f2lCases[id]!.name"
             :algorithm="f2lCases[id]!.algs[0]!"
-            :facelets="caseFaceletsForAlg(f2lCases[id]!.algs[0]!)"
+            :facelets="f2lCaseDisplayFacelets(f2lCases[id]!.algs[0]!)"
           />
         </div>
       </div>

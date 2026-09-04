@@ -1,9 +1,23 @@
 <script setup lang="ts">
 import { COLORS } from '@/cube'
 import type { Facelet } from '@/types'
+import { f2lPairFacelets } from '@/utils'
 import { computed } from 'vue'
 
 const props = defineProps<{ facelets: string }>()
+
+// Only the FR-slot corner+edge pair being solved gets its real color; every other
+// sticker (including the rest of the U layer) renders in the neutral
+// --cube-inactive gray, matching the Algorithm Presentation Format reference
+// style — see f2lPairFacelets.util.ts. --cube-inactive/--cube-grid don't change
+// with the app's light/dark theme (see main.css): this diagram is meant to read
+// like a printed reference sheet, not app chrome.
+const pairFacelets = computed(() => f2lPairFacelets(props.facelets))
+const BLANK_FILL = 'var(--cube-inactive)'
+// Used both as the backing fill (shows through the thin gaps between cells,
+// see faceBodies below) and the per-cell stroke, so grid lines read as one
+// consistent black border regardless of which cells are gray vs colored.
+const GRID_COLOR = 'var(--cube-grid)'
 
 // Isometric "opened cube corner": U (top rhombus), F (lower-left parallelogram),
 // R (lower-right parallelogram), meeting at the shared URF vertex — the standard
@@ -55,8 +69,19 @@ function inset(corners: { x: number; y: number }[], gap: number) {
   })
 }
 
+// One black backing polygon per face (its full, un-inset outline), drawn behind
+// the individual sticker cells — the GAP margin around/between cells shows this
+// through as the grid's black border, instead of showing whatever's behind the
+// SVG, and keeps the cube's overall isometric shape visible.
+const faceBodies = computed(() => [
+  { points: polygon([pointU(0, 0), pointU(0, 3), pointU(3, 3), pointU(3, 0)]), key: 'body-u' },
+  { points: polygon([pointF(0, 0), pointF(0, 3), pointF(3, 3), pointF(3, 0)]), key: 'body-f' },
+  { points: polygon([pointR(0, 0), pointR(0, 3), pointR(3, 3), pointR(3, 0)]), key: 'body-r' },
+])
+
 const cells = computed(() => {
   const f = (i: number) => props.facelets[i] as Facelet
+  const fill = (i: number) => (pairFacelets.value.has(i) ? COLORS[f(i)] : BLANK_FILL)
   const out: { points: string; fill: string; key: string }[] = []
 
   for (let row = 0; row < 3; row++) {
@@ -69,7 +94,7 @@ const cells = computed(() => {
       ]
       out.push({
         points: polygon(inset(corners, GAP)),
-        fill: COLORS[f(row * 3 + col)],
+        fill: fill(row * 3 + col),
         key: `u${row}${col}`,
       })
     }
@@ -85,7 +110,7 @@ const cells = computed(() => {
       ]
       out.push({
         points: polygon(inset(corners, GAP)),
-        fill: COLORS[f(18 + fRow * 3 + col)],
+        fill: fill(18 + fRow * 3 + col),
         key: `f${fRow}${col}`,
       })
     }
@@ -105,7 +130,7 @@ const cells = computed(() => {
       ]
       out.push({
         points: polygon(inset(corners, GAP)),
-        fill: COLORS[f(9 + rRow * 3 + col)],
+        fill: fill(9 + rRow * 3 + col),
         key: `r${rRow}${col}`,
       })
     }
@@ -117,7 +142,22 @@ const cells = computed(() => {
 
 <template>
   <svg class="diagram" viewBox="0 0 92 108" role="img" aria-label="F2L case diagram">
-    <polygon v-for="c in cells" :key="c.key" :points="c.points" :fill="c.fill" />
+    <polygon
+      v-for="b in faceBodies"
+      :key="b.key"
+      :points="b.points"
+      :fill="GRID_COLOR"
+      :stroke="GRID_COLOR"
+      stroke-width="0.6"
+    />
+    <polygon
+      v-for="c in cells"
+      :key="c.key"
+      :points="c.points"
+      :fill="c.fill"
+      :stroke="GRID_COLOR"
+      stroke-width="0.5"
+    />
   </svg>
 </template>
 
