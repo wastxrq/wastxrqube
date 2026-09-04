@@ -60,13 +60,17 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown, true))
 }
 .modal-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   color: var(--muted);
   font-size: 0.8rem;
-  padding: 4px;
 }
 .modal-close:hover {
   color: var(--text);
