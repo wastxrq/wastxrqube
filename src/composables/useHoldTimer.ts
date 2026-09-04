@@ -1,14 +1,10 @@
-import {
-  DEFAULT_HOLD_MS,
-  INSPECTION_DNF_THRESHOLD_MS,
-  INSPECTION_PLUS_TWO_THRESHOLD_MS,
-} from '@/constants'
+import { TIMER_CONSTANTS } from '@/constants'
 import type { SolvePenalty, TimerState, UseHoldTimerOptions } from '@/types'
 import { ref } from 'vue'
 
 function inspectionPenalty(inspectionMs: number): SolvePenalty {
-  if (inspectionMs > INSPECTION_DNF_THRESHOLD_MS) return 'DNF'
-  if (inspectionMs > INSPECTION_PLUS_TWO_THRESHOLD_MS) return '+2'
+  if (inspectionMs > TIMER_CONSTANTS.INSPECTION_DNF_THRESHOLD_MS) return 'DNF'
+  if (inspectionMs > TIMER_CONSTANTS.INSPECTION_PLUS_TWO_THRESHOLD_MS) return '+2'
   return 'none'
 }
 
@@ -22,7 +18,7 @@ function inspectionPenalty(inspectionMs: number): SolvePenalty {
  * inspecting) clears holdMs — release only starts the solve once armed.
  */
 export function useHoldTimer({
-  holdMs = DEFAULT_HOLD_MS,
+  holdMs = TIMER_CONSTANTS.DEFAULT_HOLD_MS,
   inspectionMs,
   onComplete,
 }: UseHoldTimerOptions = {}) {

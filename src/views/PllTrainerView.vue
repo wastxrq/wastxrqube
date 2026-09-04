@@ -3,7 +3,7 @@ import { PageSection, PllCaseDiagram, PllCaseSelector, PllCaseStats } from '@/co
 import { AppButton } from '@/components/AppButton'
 import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer, useHoldTimerInput, useInputMethod } from '@/composables'
-import { RESULT_DISPLAY_DELAY_MS } from '@/constants'
+import { TIMER_CONSTANTS } from '@/constants'
 import { canonicalPllCaseFacelets } from '@/cube'
 import { pllCases } from '@/data/pll'
 import { formatTime, pluralizeUk } from '@/lib'
@@ -44,7 +44,7 @@ const timer = useHoldTimer({
       store.logAttempt(ms)
       revealed.value = false
       timer.reset()
-    }, RESULT_DISPLAY_DELAY_MS)
+    }, TIMER_CONSTANTS.RESULT_DISPLAY_DELAY_MS)
   },
 })
 

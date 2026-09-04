@@ -3,7 +3,7 @@ import { OllCaseDiagram, OllCaseSelector, OllCaseStats, PageSection } from '@/co
 import { AppButton } from '@/components/AppButton'
 import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer, useHoldTimerInput, useInputMethod } from '@/composables'
-import { RESULT_DISPLAY_DELAY_MS } from '@/constants'
+import { TIMER_CONSTANTS } from '@/constants'
 import { caseFaceletsForAlg } from '@/cube'
 import { ollCases } from '@/data/oll'
 import { formatTime, pluralizeUk } from '@/lib'
@@ -44,7 +44,7 @@ const timer = useHoldTimer({
       store.logAttempt(ms)
       revealed.value = false
       timer.reset()
-    }, RESULT_DISPLAY_DELAY_MS)
+    }, TIMER_CONSTANTS.RESULT_DISPLAY_DELAY_MS)
   },
 })
 

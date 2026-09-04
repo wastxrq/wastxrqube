@@ -1,4 +1,4 @@
-import { LOCAL_STORAGE_KEYS, RECENT_MEAN_WINDOW, SLOW_THRESHOLD_FACTOR } from '@/constants'
+import { LOCAL_STORAGE_KEYS, RECENT_MEAN_WINDOW, TIMER_CONSTANTS } from '@/constants'
 import { scrambleForAlg } from '@/cube/engine'
 import { ollCases, ollGroups } from '@/data/oll'
 import { loadJson, saveJson } from '@/lib/storage'
@@ -109,7 +109,8 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
         continue
       }
       const avg = caseAverageBefore(attempt.caseId, attempt.timestamp)
-      if (avg !== null && attempt.ms > avg * SLOW_THRESHOLD_FACTOR) flagged.add(attempt.caseId)
+      if (avg !== null && attempt.ms > avg * TIMER_CONSTANTS.SLOW_THRESHOLD_FACTOR)
+        flagged.add(attempt.caseId)
     }
     return flagged
   }

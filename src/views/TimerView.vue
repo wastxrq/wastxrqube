@@ -8,7 +8,7 @@ import {
   useInputMethod,
   useScramble,
 } from '@/composables'
-import { INSPECTION_MS } from '@/constants'
+import { TIMER_CONSTANTS } from '@/constants'
 import { scrambledFacelets } from '@/cube'
 import { effectiveTime, formatTime } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
@@ -23,7 +23,7 @@ const { scramble, isLoading: isScrambleLoading, generate: generateScramble } = u
 const facelets = computed(() => scrambledFacelets(scramble.value))
 
 const timer = useHoldTimer({
-  inspectionMs: INSPECTION_MS,
+  inspectionMs: TIMER_CONSTANTS.INSPECTION_MS,
   onComplete: (ms, penalty) => {
     store.addSolve(ms, scramble.value, penalty)
     generateScramble()
@@ -39,7 +39,7 @@ const timerColor = computed(() => {
 })
 
 const inspectionRemaining = computed(() =>
-  Math.max(0, Math.ceil((INSPECTION_MS - timer.inspectionElapsed.value) / 1000)),
+  Math.max(0, Math.ceil((TIMER_CONSTANTS.INSPECTION_MS - timer.inspectionElapsed.value) / 1000)),
 )
 
 /**

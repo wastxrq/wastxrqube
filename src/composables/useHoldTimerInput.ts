@@ -1,4 +1,4 @@
-import { SWIPE_CANCEL_HORIZONTAL_RATIO, SWIPE_CANCEL_THRESHOLD_PX } from '@/constants'
+import { TIMER_CONSTANTS } from '@/constants'
 import type { UseHoldTimerInputOptions } from '@/types'
 import { onMounted, onUnmounted } from 'vue'
 import type { useHoldTimer } from './useHoldTimer'
@@ -92,7 +92,10 @@ export function useHoldTimerInput(
     }
     const dx = e.clientX - swipeStartX
     const dy = e.clientY - swipeStartY
-    if (dx > SWIPE_CANCEL_THRESHOLD_PX && dx > Math.abs(dy) * SWIPE_CANCEL_HORIZONTAL_RATIO) {
+    if (
+      dx > TIMER_CONSTANTS.SWIPE_CANCEL_THRESHOLD_PX &&
+      dx > Math.abs(dy) * TIMER_CONSTANTS.SWIPE_CANCEL_HORIZONTAL_RATIO
+    ) {
       swipeTracking = false
       onCancelKey?.()
     }
