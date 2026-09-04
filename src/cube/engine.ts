@@ -464,32 +464,6 @@ export function scrambleForAlg(alg: string): string {
   return foldRotations(inverted, extraRotation).join(' ')
 }
 
-const FACES = ['U', 'R', 'F', 'D', 'L', 'B'] as const
-const MODIFIERS = ['', '2', "'"] as const
-
-type Face = (typeof FACES)[number]
-type Axis = 'x' | 'y' | 'z'
-
-function axisOf(face: Face): Axis {
-  if (face === 'U' || face === 'D') return 'y'
-  if (face === 'F' || face === 'B') return 'z'
-  return 'x'
-}
-
-/** A reasonably well-mixed random-move scramble for the whole cube (practice quality, not WCA-certified). */
-export function randomScramble(length = 20): string {
-  const moves: string[] = []
-  let prevAxis: Axis | null = null
-  for (let i = 0; i < length; i++) {
-    const candidates = FACES.filter((f) => axisOf(f) !== prevAxis)
-    const face = candidates[Math.floor(Math.random() * candidates.length)]!
-    const mod = MODIFIERS[Math.floor(Math.random() * MODIFIERS.length)]!
-    moves.push(face + mod)
-    prevAxis = axisOf(face)
-  }
-  return moves.join(' ')
-}
-
 /** Applies a scramble (or any move sequence) to a solved cube and returns its 54-char facelet string. */
 export function scrambledFacelets(scramble: string): string {
   const c = new Cube()

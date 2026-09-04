@@ -1,25 +1,25 @@
 <script setup lang="ts">
 import { CubeNet, PageSection, StatsPanel, TimerHistory } from '@/components'
 import { ScrambleRow } from '@/components/ScrambleRow'
-import { useDeleteHotkey, useHoldTimer } from '@/composables'
+import { useDeleteHotkey, useHoldTimer, useScramble } from '@/composables'
 import { INSPECTION_MS } from '@/constants'
-import { randomScramble, scrambledFacelets } from '@/cube'
+import { scrambledFacelets } from '@/cube'
 import { effectiveTime, formatTime } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
 const store = useTimerSessionsStore()
-const scramble = ref(randomScramble())
+const { scramble, isLoading: isScrambleLoading, generate: generateScramble } = useScramble()
 const facelets = computed(() => scrambledFacelets(scramble.value))
 
 const timer = useHoldTimer({
   inspectionMs: INSPECTION_MS,
   onComplete: (ms, penalty) => {
     store.addSolve(ms, scramble.value, penalty)
-    scramble.value = randomScramble()
+    generateScramble()
   },
 })
 
@@ -52,13 +52,11 @@ const displayText = computed(() =>
     : formatTime(shownMs.value),
 )
 
-const hintText = computed(() =>
-  timer.state.value === 'inspecting' ? t('timer.hintInspecting') : t('timer.hintIdle'),
-)
-
-function newScramble() {
-  scramble.value = randomScramble()
-}
+const hintText = computed(() => {
+  if (timer.state.value === 'inspecting') return t('timer.hintInspecting')
+  if (timer.state.value === 'idle' && isScrambleLoading.value) return t('common.generatingScramble')
+  return t('timer.hintIdle')
+})
 
 useDeleteHotkey({
   enabled: () => timer.state.value !== 'running' && store.solves.length > 0,
@@ -73,6 +71,10 @@ function onWindowKeydown(e: KeyboardEvent) {
 
   if (e.code === 'Space') {
     e.preventDefault()
+    // Only blocks starting a fresh hold — press() still needs to run in every
+    // other state (e.g. to stop a running solve) regardless of a background
+    // scramble regeneration.
+    if (timer.state.value === 'idle' && isScrambleLoading.value) return
     timer.press()
     return
   }
@@ -107,9 +109,10 @@ onUnmounted(() => {
       <ScrambleRow
         class="scramble-slot"
         :scramble="scramble"
+        :is-loading="isScrambleLoading"
         refreshable
-        :refresh-disabled="timer.state.value !== 'idle'"
-        @refresh="newScramble"
+        :refresh-disabled="timer.state.value !== 'idle' || isScrambleLoading"
+        @refresh="generateScramble"
       />
 
       <div class="timer-block">
