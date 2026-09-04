@@ -1,3 +1,5 @@
 export { useDeleteHotkey } from './useDeleteHotkey'
 export { useHoldTimer } from './useHoldTimer'
+export { useHoldTimerInput } from './useHoldTimerInput'
+export { useInputMethod } from './useInputMethod'
 export { useScramble } from './useScramble'
