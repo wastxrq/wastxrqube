@@ -94,6 +94,7 @@ const { onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = useHoldTi
         class="scramble-slot"
         :scramble="scramble"
         :is-loading="isScrambleLoading"
+        :min-lines="5"
         refreshable
         :refresh-disabled="timer.state.value !== 'idle' || isScrambleLoading"
         @refresh="generateScramble"
