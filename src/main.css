@@ -21,6 +21,9 @@
 
   --oll-on: #f4c60a;
   --oll-off: #2b303b;
+  --pll-arrow: #101114;
+  --cube-inactive: #b0b0b0;
+  --cube-grid: #1a1a1a;
 
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
@@ -38,6 +41,10 @@
   --muted: #6b7280;
 
   --oll-off: #d5d8dd;
+  /* --cube-inactive/--cube-grid intentionally unchanged: this diagram reads like
+     a printed reference sheet, not app chrome, so it doesn't follow the theme. */
+  --cube-inactive: #b0b0b0;
+  --cube-grid: #1a1a1a;
 
   color-scheme: light;
 }

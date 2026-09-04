@@ -1,6 +1,7 @@
 {
   "common": {
     "newScrambleTitle": "New scramble",
+    "generatingScramble": "Generating scramble…",
     "plural": {
       "case": { "one": "case", "few": "cases", "many": "cases" },
       "solve": { "one": "solve", "few": "solves", "many": "solves" }

@@ -1,6 +1,7 @@
 {
   "common": {
     "newScrambleTitle": "Nueva mezcla",
+    "generatingScramble": "Generando la mezcla…",
     "plural": {
       "case": { "one": "caso", "few": "casos", "many": "casos" },
       "solve": { "one": "resolución", "few": "resoluciones", "many": "resoluciones" }

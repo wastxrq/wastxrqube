@@ -1,15 +1,14 @@
-export const OLL_SELECTION_STORAGE_KEY = 'wastxrqube:ollSelection'
-export const OLL_HISTORY_STORAGE_KEY = 'wastxrqube:ollHistory'
+export const LOCAL_STORAGE_KEYS = {
+  LOCALE_STORAGE_KEY: 'wastxrqube:locale',
 
-export const PLL_SELECTION_STORAGE_KEY = 'wastxrqube:pllSelection'
-export const PLL_HISTORY_STORAGE_KEY = 'wastxrqube:pllHistory'
+  OLL_SELECTION_STORAGE_KEY: 'wastxrqube:ollSelection',
+  OLL_HISTORY_STORAGE_KEY: 'wastxrqube:ollHistory',
+  OLL_HISTORY_LIMIT: 1000,
 
-/** Oldest entries are dropped once history exceeds this many attempts. */
-export const OLL_HISTORY_LIMIT = 1000
-export const PLL_HISTORY_LIMIT = 1000
+  PLL_SELECTION_STORAGE_KEY: 'wastxrqube:pllSelection',
+  PLL_HISTORY_STORAGE_KEY: 'wastxrqube:pllHistory',
+  PLL_HISTORY_LIMIT: 1000,
 
-export const TIMER_SESSIONS_STORAGE_KEY = 'wastxrqube:timerSessions'
-
-export const LOCALE_STORAGE_KEY = 'wastxrqube:locale'
-
-export const THEME_STORAGE_KEY = 'wastxrqube:theme'
+  THEME_STORAGE_KEY: 'wastxrqube:theme',
+  TIMER_SESSIONS_STORAGE_KEY: 'wastxrqube:timerSessions',
+} as const

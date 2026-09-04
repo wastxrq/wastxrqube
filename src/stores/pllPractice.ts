@@ -1,20 +1,18 @@
+import { LOCAL_STORAGE_KEYS, RECENT_MEAN_WINDOW, SLOW_THRESHOLD_FACTOR } from '@/constants'
 import { scrambleForAlg } from '@/cube/engine'
 import { pllCases, pllGroups } from '@/data/pll'
-import { defineStore } from 'pinia'
-import { computed, ref, watch } from 'vue'
-import {
-  PLL_HISTORY_LIMIT,
-  PLL_HISTORY_STORAGE_KEY,
-  PLL_SELECTION_STORAGE_KEY,
-  RECENT_MEAN_WINDOW,
-  SLOW_THRESHOLD_FACTOR,
-} from '@/constants'
 import { loadJson, saveJson } from '@/lib/storage'
 import type { CaseAttempt, CaseStats } from '@/types'
+import { defineStore } from 'pinia'
+import { computed, ref, watch } from 'vue'
 
 export const usePllPracticeStore = defineStore('pllPractice', () => {
-  const selectedCases = ref<string[]>(loadJson(PLL_SELECTION_STORAGE_KEY, ['T', 'Ja']))
-  const history = ref<CaseAttempt<string>[]>(loadJson(PLL_HISTORY_STORAGE_KEY, []))
+  const selectedCases = ref<string[]>(
+    loadJson(LOCAL_STORAGE_KEYS.PLL_SELECTION_STORAGE_KEY, ['T', 'Ja']),
+  )
+  const history = ref<CaseAttempt<string>[]>(
+    loadJson(LOCAL_STORAGE_KEYS.PLL_HISTORY_STORAGE_KEY, []),
+  )
   const currentCaseId = ref<string | null>(null)
   const currentScramble = ref('')
   // Fixed at startRecap() time; deliberately not reactive against later selectedCases
@@ -23,8 +21,10 @@ export const usePllPracticeStore = defineStore('pllPractice', () => {
   const lastRecapAt = ref<number | null>(null)
   const storeInitAt = Date.now()
 
-  watch(selectedCases, (v) => saveJson(PLL_SELECTION_STORAGE_KEY, v), { deep: true })
-  watch(history, (v) => saveJson(PLL_HISTORY_STORAGE_KEY, v), { deep: true })
+  watch(selectedCases, (v) => saveJson(LOCAL_STORAGE_KEYS.PLL_SELECTION_STORAGE_KEY, v), {
+    deep: true,
+  })
+  watch(history, (v) => saveJson(LOCAL_STORAGE_KEYS.PLL_HISTORY_STORAGE_KEY, v), { deep: true })
 
   const mode = computed<'practice' | 'recap'>(() =>
     recapQueue.value.length > 0 ? 'recap' : 'practice',
@@ -79,8 +79,8 @@ export const usePllPracticeStore = defineStore('pllPractice', () => {
   function logAttempt(ms: number | null) {
     if (currentCaseId.value === null) return
     history.value.push({ caseId: currentCaseId.value, ms, timestamp: Date.now() })
-    if (history.value.length > PLL_HISTORY_LIMIT) {
-      history.value.splice(0, history.value.length - PLL_HISTORY_LIMIT)
+    if (history.value.length > LOCAL_STORAGE_KEYS.PLL_HISTORY_LIMIT) {
+      history.value.splice(0, history.value.length - LOCAL_STORAGE_KEYS.PLL_HISTORY_LIMIT)
     }
     pickNext()
   }

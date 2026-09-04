@@ -1,33 +1,103 @@
 <script setup lang="ts">
 import { lastLayerView } from '@/cube'
+import {
+  getBottomFlapRect,
+  getGridCellRect,
+  getLeftFlapRect,
+  getRightFlapRect,
+  getTopFlapRect,
+} from '@/utils'
 import { computed } from 'vue'
 
 const props = defineProps<{ facelets: string }>()
 
-const grid = computed(() => lastLayerView(props.facelets).grid)
+const view = computed(() => lastLayerView(props.facelets))
 
-const CELL = (100 - 12) / 3
-
-const cells = computed(() =>
-  grid.value.map((facelet, i) => {
-    const row = Math.floor(i / 3)
-    const col = i % 3
-    return {
-      x: 6 + col * CELL,
-      y: 6 + row * CELL,
-      w: CELL - 2,
-      h: CELL - 2,
-      on: facelet === 'U',
-      key: `c${i}`,
-    }
-  }),
+// Layout geometry mirrors PllCaseDiagram.vue's flap strips, so cases with a
+// similar top pattern but different piece orientations remain visually
+// distinguishable. OLL keeps its binary on/off color scheme instead of the
+// full sticker colors PLL uses.
+const gridCells = computed(() =>
+  view.value.grid.map((facelet, i) => ({
+    ...getGridCellRect(i),
+    on: facelet === 'U',
+    key: `g${i}`,
+  })),
+)
+const topFlaps = computed(() =>
+  view.value.top.map((facelet, i) => ({
+    ...getTopFlapRect(i),
+    on: facelet === 'U',
+    key: `t${i}`,
+  })),
+)
+const bottomFlaps = computed(() =>
+  view.value.bottom.map((facelet, i) => ({
+    ...getBottomFlapRect(i),
+    on: facelet === 'U',
+    key: `b${i}`,
+  })),
+)
+const leftFlaps = computed(() =>
+  view.value.left.map((facelet, i) => ({
+    ...getLeftFlapRect(i),
+    on: facelet === 'U',
+    key: `l${i}`,
+  })),
+)
+const rightFlaps = computed(() =>
+  view.value.right.map((facelet, i) => ({
+    ...getRightFlapRect(i),
+    on: facelet === 'U',
+    key: `r${i}`,
+  })),
 )
 </script>
 
 <template>
   <svg class="diagram" viewBox="0 0 100 100" role="img" aria-label="OLL case diagram">
     <rect
-      v-for="c in cells"
+      v-for="f in topFlaps"
+      :key="f.key"
+      :x="f.x"
+      :y="f.y"
+      :width="f.w"
+      :height="f.h"
+      rx="1"
+      :fill="f.on ? 'var(--oll-on)' : 'var(--oll-off)'"
+    />
+    <rect
+      v-for="f in bottomFlaps"
+      :key="f.key"
+      :x="f.x"
+      :y="f.y"
+      :width="f.w"
+      :height="f.h"
+      rx="1"
+      :fill="f.on ? 'var(--oll-on)' : 'var(--oll-off)'"
+    />
+    <rect
+      v-for="f in leftFlaps"
+      :key="f.key"
+      :x="f.x"
+      :y="f.y"
+      :width="f.w"
+      :height="f.h"
+      rx="1"
+      :fill="f.on ? 'var(--oll-on)' : 'var(--oll-off)'"
+    />
+    <rect
+      v-for="f in rightFlaps"
+      :key="f.key"
+      :x="f.x"
+      :y="f.y"
+      :width="f.w"
+      :height="f.h"
+      rx="1"
+      :fill="f.on ? 'var(--oll-on)' : 'var(--oll-off)'"
+    />
+    <rect
+      v-for="c in gridCells"
       :key="c.key"
       :x="c.x"
       :y="c.y"

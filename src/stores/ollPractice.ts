@@ -1,20 +1,18 @@
+import { LOCAL_STORAGE_KEYS, RECENT_MEAN_WINDOW, SLOW_THRESHOLD_FACTOR } from '@/constants'
 import { scrambleForAlg } from '@/cube/engine'
 import { ollCases, ollGroups } from '@/data/oll'
+import { loadJson, saveJson } from '@/lib/storage'
+import type { CaseAttempt, CaseStats } from '@/types'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
-import {
-  OLL_HISTORY_LIMIT,
-  OLL_HISTORY_STORAGE_KEY,
-  OLL_SELECTION_STORAGE_KEY,
-  RECENT_MEAN_WINDOW,
-  SLOW_THRESHOLD_FACTOR,
-} from '@/constants'
-import { loadJson, saveJson } from '@/lib/storage'
-import type { CaseStats, CaseAttempt } from '@/types'
 
 export const useOllPracticeStore = defineStore('ollPractice', () => {
-  const selectedCases = ref<number[]>(loadJson(OLL_SELECTION_STORAGE_KEY, [31, 32]))
-  const history = ref<CaseAttempt<number>[]>(loadJson(OLL_HISTORY_STORAGE_KEY, []))
+  const selectedCases = ref<number[]>(
+    loadJson(LOCAL_STORAGE_KEYS.OLL_SELECTION_STORAGE_KEY, [31, 32]),
+  )
+  const history = ref<CaseAttempt<number>[]>(
+    loadJson(LOCAL_STORAGE_KEYS.OLL_HISTORY_STORAGE_KEY, []),
+  )
   const currentCaseId = ref<number | null>(null)
   const currentScramble = ref('')
   // Fixed at startRecap() time; deliberately not reactive against later selectedCases
@@ -23,8 +21,10 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
   const lastRecapAt = ref<number | null>(null)
   const storeInitAt = Date.now()
 
-  watch(selectedCases, (v) => saveJson(OLL_SELECTION_STORAGE_KEY, v), { deep: true })
-  watch(history, (v) => saveJson(OLL_HISTORY_STORAGE_KEY, v), { deep: true })
+  watch(selectedCases, (v) => saveJson(LOCAL_STORAGE_KEYS.OLL_SELECTION_STORAGE_KEY, v), {
+    deep: true,
+  })
+  watch(history, (v) => saveJson(LOCAL_STORAGE_KEYS.OLL_HISTORY_STORAGE_KEY, v), { deep: true })
 
   const mode = computed<'practice' | 'recap'>(() =>
     recapQueue.value.length > 0 ? 'recap' : 'practice',
@@ -79,8 +79,8 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
   function logAttempt(ms: number | null) {
     if (currentCaseId.value === null) return
     history.value.push({ caseId: currentCaseId.value, ms, timestamp: Date.now() })
-    if (history.value.length > OLL_HISTORY_LIMIT) {
-      history.value.splice(0, history.value.length - OLL_HISTORY_LIMIT)
+    if (history.value.length > LOCAL_STORAGE_KEYS.OLL_HISTORY_LIMIT) {
+      history.value.splice(0, history.value.length - LOCAL_STORAGE_KEYS.OLL_HISTORY_LIMIT)
     }
     pickNext()
   }

@@ -1,5 +1,8 @@
 export type TimerState = 'idle' | 'holding' | 'ready' | 'inspecting' | 'running'
 
+/** A WCA event ID accepted by cubing/scramble's randomScrambleForEvent (see lib/scramble.ts). */
+export type ScrambleEvent = '333'
+
 export interface UseHoldTimerOptions {
   holdMs?: number
   /** Enables a WCA-style inspection phase (idle→inspecting) before running starts, this many ms long. */

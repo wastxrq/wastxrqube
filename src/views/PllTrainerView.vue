@@ -4,7 +4,7 @@ import { AppButton } from '@/components/AppButton'
 import { ScrambleRow } from '@/components/ScrambleRow'
 import { useDeleteHotkey, useHoldTimer } from '@/composables'
 import { RESULT_DISPLAY_DELAY_MS } from '@/constants'
-import { caseFaceletsForAlg } from '@/cube'
+import { canonicalPllCaseFacelets } from '@/cube'
 import { pllCases } from '@/data/pll'
 import { formatTime, pluralizeUk } from '@/lib'
 import { usePllPracticeStore } from '@/stores'
@@ -27,7 +27,7 @@ const currentCase = computed(() =>
   store.currentCaseId !== null ? pllCases[store.currentCaseId] : null,
 )
 const currentFacelets = computed(() =>
-  currentCase.value ? caseFaceletsForAlg(currentCase.value.algs[0]!) : '',
+  currentCase.value ? canonicalPllCaseFacelets(currentCase.value.algs[0]!) : '',
 )
 
 const revealed = ref(false)

@@ -2,7 +2,12 @@
 import { RefreshIcon } from '@/components/icons'
 import { useI18n } from 'vue-i18n'
 
-defineProps<{ scramble: string; refreshable?: boolean; refreshDisabled?: boolean }>()
+defineProps<{
+  scramble: string
+  refreshable?: boolean
+  refreshDisabled?: boolean
+  isLoading?: boolean
+}>()
 defineEmits<{ refresh: [] }>()
 
 const { t } = useI18n()
@@ -10,7 +15,7 @@ const { t } = useI18n()
 
 <template>
   <div class="scramble-row">
-    <div class="scramble">{{ scramble }}</div>
+    <div class="scramble">{{ isLoading ? t('common.generatingScramble') : scramble }}</div>
     <button
       v-if="refreshable"
       class="scramble-refresh"

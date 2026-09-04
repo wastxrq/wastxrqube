@@ -1,6 +1,7 @@
 {
   "common": {
     "newScrambleTitle": "Нова розкладка",
+    "generatingScramble": "Розкладка генерується…",
     "plural": {
       "case": { "one": "кейс", "few": "кейси", "many": "кейсів" },
       "solve": { "one": "розв'язок", "few": "розв'язки", "many": "розв'язків" }
