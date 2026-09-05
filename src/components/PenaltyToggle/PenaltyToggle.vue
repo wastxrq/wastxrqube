@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppButton } from '@/components/AppButton'
+import { AppButton } from '@/components'
 import type { SolvePenalty } from '@/types'
 
 withDefaults(

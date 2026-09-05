@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { PageSection, PllCaseDiagram, PllCaseSelector, PllCaseStats } from '@/components'
-import { AppButton } from '@/components/AppButton'
-import { ScrambleRow } from '@/components/ScrambleRow'
+import {
+  AppButton,
+  PageSection,
+  PllCaseDiagram,
+  PllCaseSelector,
+  PllCaseStats,
+  ScrambleRow,
+} from '@/components'
 import { useDeleteHotkey, useHoldTimer, useHoldTimerInput, useInputMethod } from '@/composables'
 import { TIMER_CONSTANTS } from '@/constants'
 import { canonicalPllCaseFacelets } from '@/cube'

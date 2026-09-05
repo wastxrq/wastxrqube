@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { OllCaseDiagram, OllCaseSelector, OllCaseStats, PageSection } from '@/components'
-import { AppButton } from '@/components/AppButton'
-import { ScrambleRow } from '@/components/ScrambleRow'
+import {
+  AppButton,
+  OllCaseDiagram,
+  OllCaseSelector,
+  OllCaseStats,
+  PageSection,
+  ScrambleRow,
+} from '@/components'
 import { useDeleteHotkey, useHoldTimer, useHoldTimerInput, useInputMethod } from '@/composables'
 import { TIMER_CONSTANTS } from '@/constants'
 import { caseFaceletsForAlg } from '@/cube'

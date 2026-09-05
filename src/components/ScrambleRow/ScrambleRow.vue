@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RefreshIcon } from '@/components/icons'
+import { RefreshIcon } from '@/components'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppButton } from '@/components/AppButton'
+import { AppButton, CaseCard, CollapsiblePanel } from '@/components'
 import { canonicalPllCaseFacelets } from '@/cube/engine'
 import { pllCases, pllGroups } from '@/data/pll'
 import { pluralizeUk } from '@/lib/pluralize'
@@ -7,8 +7,6 @@ import { usePllPracticeStore } from '@/stores/pllPractice'
 import { CASE_CARD_MAX_SIZE_PX, CASE_CARD_MIN_SIZE_PX } from '@/constants'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { CaseCard } from '../CaseCard'
-import { CollapsiblePanel } from '../CollapsiblePanel'
 import PllCaseDiagram from './PllCaseDiagram.vue'
 
 const store = usePllPracticeStore()

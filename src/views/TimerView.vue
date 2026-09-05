@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { CubeNet, PageSection, StatsPanel, TimerHistory } from '@/components'
-import { ScrambleRow } from '@/components/ScrambleRow'
+import {
+  CubeNet,
+  PageSection,
+  PenaltyToggle,
+  ScrambleRow,
+  StatsPanel,
+  TimerHistory,
+} from '@/components'
 import {
   useDeleteHotkey,
   useHoldTimer,
@@ -42,10 +48,8 @@ const inspectionRemaining = computed(() =>
   Math.max(0, Math.ceil((TIMER_CONSTANTS.INSPECTION_MS - timer.inspectionElapsed.value) / 1000)),
 )
 
-/**
- * While idle, keep showing the last result (with any penalty applied) rather than resetting to 0.00 —
- * derived from the store so editing the last solve's penalty in the history list stays in sync here too.
- */
+// While idle, keep showing the last result instead of resetting to 0.00 —
+// derived from the store so editing its penalty in the history list stays in sync.
 const lastSolve = computed(() => store.solves[store.solves.length - 1])
 const lastSolveIndex = computed(() => store.solves.length - 1)
 const shownMs = computed(() => {
@@ -66,9 +70,8 @@ const hintText = computed(() => {
   return isTouch.value ? t('timer.hintIdleTouch') : t('timer.hintIdle')
 })
 
-// Esc already cancels inspection on desktop; swipe right is its touch
-// equivalent (see useHoldTimerInput) — surfaced here since it's not otherwise
-// discoverable the way a labeled button would be.
+// Swipe right is the touch equivalent of Esc (see useHoldTimerInput) —
+// surfaced here since it's not otherwise discoverable.
 const showSwipeCancelHint = computed(() => isTouch.value && timer.state.value === 'inspecting')
 
 useDeleteHotkey({
@@ -77,8 +80,7 @@ useDeleteHotkey({
 })
 
 // Only blocks starting a fresh hold — press() still needs to run in every
-// other state (e.g. to stop a running solve) regardless of a background
-// scramble regeneration.
+// other state to stop a running solve.
 const { onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = useHoldTimerInput(timer, {
   canStart: () => !isScrambleLoading.value,
   onCancelKey: () => timer.cancel(),
@@ -114,20 +116,12 @@ const { onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = useHoldTi
         </div>
 
         <div v-if="lastSolve && timer.state.value === 'idle'" class="quick-actions">
-          <button
-            class="quick-btn"
-            :class="{ active: lastSolve.penalty === '+2' }"
-            @click="store.setPenalty(lastSolveIndex, '+2')"
-          >
-            +2
-          </button>
-          <button
-            class="quick-btn"
-            :class="{ active: lastSolve.penalty === 'DNF' }"
-            @click="store.setPenalty(lastSolveIndex, 'DNF')"
-          >
-            DNF
-          </button>
+          <PenaltyToggle
+            :penalty="lastSolve.penalty"
+            button-class="quick-btn"
+            show-active
+            @set-penalty="store.setPenalty(lastSolveIndex, $event)"
+          />
         </div>
       </div>
 
@@ -172,9 +166,7 @@ const { onPointerDown, onPointerMove, onPointerUp, onPointerCancel } = useHoldTi
   align-items: center;
   gap: 4px;
   padding: 12px 24px;
-  /* Large tap-and-hold target for touch/pen — see useHoldTimerInput. Blocks the
-     browser's own touch gestures (scroll, double-tap zoom, text selection) so a
-     hold isn't interrupted or misread as a page gesture. */
+  /* Blocks the browser's own touch gestures so a hold isn't misread as a page gesture. */
   touch-action: none;
   user-select: none;
 }

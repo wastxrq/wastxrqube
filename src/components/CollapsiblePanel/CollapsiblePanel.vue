@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ChevronIcon } from '@/components/icons'
+import { ChevronIcon } from '@/components'
 
 const props = defineProps<{ defaultOpen?: boolean; count?: number; label: string }>()
 const open = ref(props.defaultOpen ?? false)
