@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { AppButton } from '@/components/AppButton'
-import { CollapsiblePanel } from '@/components/CollapsiblePanel'
+import { AppButton, CollapsiblePanel, PenaltyToggle } from '@/components'
 import { useInputMethod } from '@/composables'
 import { effectiveTime, formatTime, pluralizeUk } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
@@ -92,8 +91,11 @@ function submitNewSession() {
         </span>
         <span v-if="solve.penalty !== 'none'" class="solve-penalty">{{ solve.penalty }}</span>
         <div class="solve-actions">
-          <button @click.stop="store.setPenalty(store.solves.length - 1 - i, '+2')">+2</button>
-          <button @click.stop="store.setPenalty(store.solves.length - 1 - i, 'DNF')">DNF</button>
+          <PenaltyToggle
+            :penalty="solve.penalty"
+            stop-propagation
+            @set-penalty="store.setPenalty(store.solves.length - 1 - i, $event)"
+          />
           <button @click.stop="store.deleteSolve(store.solves.length - 1 - i)">✕</button>
         </div>
       </div>
