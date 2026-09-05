@@ -1,7 +1,5 @@
-// Standard Kociemba corner/edge facelet index tables (0-indexed into the 54-char
-// facelet string: 0-8=U, 9-17=R, 18-26=F, 27-35=D, 36-44=L, 45-53=B — see
-// cube/lastLayerView.ts's own layout comment), derived from and verified against
-// cubejs's own cornerFacelet/edgeFacelet tables (node_modules/cubejs/lib/cube.js).
+// Standard Kociemba corner/edge facelet index tables (0-8=U, 9-17=R, 18-26=F,
+// 27-35=D, 36-44=L, 45-53=B), verified against cubejs's own tables.
 const CORNER_FACELETS: readonly (readonly [number, number, number])[] = [
   [8, 9, 20], // URF
   [6, 18, 38], // UFL
@@ -39,12 +37,9 @@ function sortedColors(facelets: string, indices: readonly number[]): string {
 }
 
 /**
- * Locates the FR-slot corner and edge piece (identified by their solved D/F/R
- * color signature, not by position — a case's own corner/edge may currently sit
- * anywhere: loose in the U layer, or already in the FR slot but twisted/flipped)
- * within a case's facelets, returning the set of facelet indices that belong to
- * them at their current position. Used to highlight only the F2L pair on an
- * otherwise-blank case diagram (see F2lCaseDiagram.vue).
+ * Locates the FR-slot corner and edge piece by their solved D/F/R color
+ * signature, not by position (they may sit anywhere: loose in the U layer, or
+ * in the FR slot but twisted/flipped), returning their current facelet indices.
  */
 export function f2lPairFacelets(facelets: string): Set<number> {
   const corner = CORNER_FACELETS.find(

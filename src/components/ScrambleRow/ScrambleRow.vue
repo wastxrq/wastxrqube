@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import { RefreshIcon } from '@/components/icons'
+import { RefreshIcon } from '@/components'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-defineProps<{
-  scramble: string
-  refreshable?: boolean
-  refreshDisabled?: boolean
-  isLoading?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    scramble: string
+    refreshable?: boolean
+    refreshDisabled?: boolean
+    isLoading?: boolean
+    /** How many wrapped lines of scramble text to always reserve height for — see .scramble's comment. */
+    minLines?: number
+  }>(),
+  { minLines: 2 },
+)
 defineEmits<{ refresh: [] }>()
 
 const { t } = useI18n()
+const scrambleMinHeight = computed(() => `calc(1.6rem * 1.3 * ${props.minLines})`)
 </script>
 
 <template>
@@ -36,6 +43,13 @@ const { t } = useI18n()
   justify-content: center;
   gap: 10px;
   width: 100%;
+  /* Reserved on the row itself, not the text alone, so text and button stay
+     centered together regardless of how many lines the text wraps to.
+     Default (2) matches OllTrainerView/PllTrainerView's short scrambles;
+     TimerView passes 5 — its WCA scrambles run 18-21 moves/up to 60 chars
+     (measured over 190 samples), which wraps to 5 lines at a 320px viewport
+     (verified with headless Chrome). */
+  min-height: v-bind(scrambleMinHeight);
 }
 .scramble {
   font-family: var(--font-mono);
@@ -44,19 +58,18 @@ const { t } = useI18n()
   letter-spacing: 0.02em;
   line-height: 1.3;
   text-align: center;
-  /* Reserve height for exactly two lines so switching between a 1-line and a
-     2-line scramble doesn't shift the diagram/timer/stats below it. */
-  min-height: calc(1.6rem * 1.3 * 2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* min-width:0 opts out of a flex item's default min-width:auto, which
+     would let this grow to fit the scramble on one unwrapped line instead
+     of wrapping within the row's available space. */
+  flex: 1 1 auto;
+  min-width: 0;
 }
 .scramble-refresh {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   background: var(--panel-2);
   border: 1px solid var(--border);

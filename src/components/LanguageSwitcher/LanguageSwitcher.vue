@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronIcon } from '@/components/icons'
+import { ChevronIcon } from '@/components'
 import { LOCAL_STORAGE_KEYS } from '@/constants'
 import type { Locale } from '@/i18n'
 import { saveJson } from '@/lib/storage'

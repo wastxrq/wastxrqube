@@ -1,43 +1,32 @@
 <script setup lang="ts">
 import { COLORS } from '@/cube'
 import type { Facelet } from '@/types'
-import { f2lPairFacelets } from '@/utils'
+import { add, f2lPairFacelets, inset, polygon } from '@/utils'
 import { computed } from 'vue'
 
 const props = defineProps<{ facelets: string }>()
 
-// Only the FR-slot corner+edge pair being solved gets its real color; every other
-// sticker (including the rest of the U layer) renders in the neutral
-// --cube-inactive gray, matching the Algorithm Presentation Format reference
-// style — see f2lPairFacelets.util.ts. --cube-inactive/--cube-grid don't change
-// with the app's light/dark theme (see main.css): this diagram is meant to read
-// like a printed reference sheet, not app chrome.
+// Only the FR-slot pair being solved gets its real color — everything else
+// renders neutral gray, matching the APF reference style. --cube-inactive/
+// --cube-grid stay fixed across themes (see main.css) since this reads like
+// a printed reference sheet, not app chrome.
 const pairFacelets = computed(() => f2lPairFacelets(props.facelets))
 const BLANK_FILL = 'var(--cube-inactive)'
-// Used both as the backing fill (shows through the thin gaps between cells,
-// see faceBodies below) and the per-cell stroke, so grid lines read as one
-// consistent black border regardless of which cells are gray vs colored.
+// Backing fill (shows through cell gaps) and per-cell stroke, so grid lines
+// read as one consistent border.
 const GRID_COLOR = 'var(--cube-grid)'
 
-// Isometric "opened cube corner": U (top rhombus), F (lower-left parallelogram),
-// R (lower-right parallelogram), meeting at the shared URF vertex — the standard
-// way F2L reference sheets draw a case, since the corner/edge pair can be
-// anywhere in the U layer or already (mis)placed in the FR slot itself.
+// Isometric "opened cube corner": U (top rhombus), F/R (lower parallelograms)
+// meeting at the shared URF vertex — the standard way F2L sheets draw a case.
 const CELL = 16
 const GAP = 1.2
-const ORIGIN = { x: 46, y: 6 } // the drawn ULB corner (ULB = ULB corner of U)
+const ORIGIN = { x: 46, y: 6 }
 
-// Basis vectors: moving "toward F" or "toward R" on the U face also moves down
-// the page, since F/R visually hang below U — this is what makes the top face
-// read as a diamond and F/R as the two lower faces sharing its bottom-left and
-// bottom-right edges.
+// Moving "toward F"/"toward R" on U also moves down the page (F/R visually
+// hang below U), which is what makes U read as a diamond.
 const V_TO_F = { x: -Math.cos(Math.PI / 6) * CELL, y: 0.5 * CELL }
 const V_TO_R = { x: Math.cos(Math.PI / 6) * CELL, y: 0.5 * CELL }
 const V_DOWN = { x: 0, y: CELL }
-
-function add(a: { x: number; y: number }, b: { x: number; y: number }, s = 1) {
-  return { x: a.x + b.x * s, y: a.y + b.y * s }
-}
 
 /** Point on the U-face lattice: i = steps toward F (0=back/B edge, 3=front/F edge), j = steps toward R (0=left/L edge, 3=right/R edge). */
 function pointU(i: number, j: number) {
@@ -52,27 +41,8 @@ function pointR(rr: number, i: number) {
   return add(pointU(i, 3), V_DOWN, rr)
 }
 
-function polygon(corners: { x: number; y: number }[]) {
-  return corners.map((c) => `${c.x},${c.y}`).join(' ')
-}
-
-/** Shrinks a quad toward its own centroid by `gap`, so adjacent cells show a thin gap despite not being axis-aligned rects. */
-function inset(corners: { x: number; y: number }[], gap: number) {
-  const cx = corners.reduce((s, c) => s + c.x, 0) / corners.length
-  const cy = corners.reduce((s, c) => s + c.y, 0) / corners.length
-  return corners.map((c) => {
-    const dx = c.x - cx
-    const dy = c.y - cy
-    const len = Math.hypot(dx, dy) || 1
-    const shrink = Math.min(gap, len / 2)
-    return { x: c.x - (dx / len) * shrink, y: c.y - (dy / len) * shrink }
-  })
-}
-
-// One black backing polygon per face (its full, un-inset outline), drawn behind
-// the individual sticker cells — the GAP margin around/between cells shows this
-// through as the grid's black border, instead of showing whatever's behind the
-// SVG, and keeps the cube's overall isometric shape visible.
+// One backing polygon per face, drawn behind the sticker cells so GAP's
+// margin shows through as the grid's black border.
 const faceBodies = computed(() => [
   { points: polygon([pointU(0, 0), pointU(0, 3), pointU(3, 3), pointU(3, 0)]), key: 'body-u' },
   { points: polygon([pointF(0, 0), pointF(0, 3), pointF(3, 3), pointF(3, 0)]), key: 'body-f' },

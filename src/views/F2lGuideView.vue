@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { F2lCaseBrowser } from '@/components'
-import { CollapsiblePanel } from '@/components/CollapsiblePanel'
+import { CollapsiblePanel, F2lCaseBrowser } from '@/components'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()

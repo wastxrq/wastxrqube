@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CollapsiblePanel } from '@/components/CollapsiblePanel'
+import { CollapsiblePanel } from '@/components'
 import { f2lCases, f2lGroups } from '@/data/f2l'
 import { pluralizeUk } from '@/lib/pluralize'
 import { f2lCaseDisplayFacelets } from '@/utils'
