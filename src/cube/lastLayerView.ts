@@ -1,13 +1,7 @@
-// Facelet string layout (cubejs / standard Kociemba order):
-// index 0-8 = U, 9-17 = R, 18-26 = F, 27-35 = D, 36-44 = L, 45-53 = B
-// U grid (row-major): 0=ULB 1=UB 2=UBR / 3=UL 4=center 5=UR / 6=UFL 7=UF 8=URF
-//
-// Adjacency (derived from the standard cube net and verified against the
-// engine): viewed from above with F at the bottom of the picture,
-//   top strip (B, reversed):    B3 B2 B1  -> facelets 47 46 45
-//   bottom strip (F, direct):   F1 F2 F3  -> facelets 18 19 20
-//   left strip (L, direct):     L1 L2 L3  -> facelets 36 37 38 (top to bottom)
-//   right strip (R, reversed):  R3 R2 R1  -> facelets 11 10  9 (top to bottom)
+// Facelet layout (cubejs/Kociemba order): 0-8=U, 9-17=R, 18-26=F, 27-35=D,
+// 36-44=L, 45-53=B. U grid (row-major): 0=ULB 1=UB 2=UBR / 3=UL 4=center 5=UR
+// / 6=UFL 7=UF 8=URF. Viewed from above with F at the bottom: B and R strips
+// run reversed relative to their own facelet order, L and F run direct.
 
 import type { Facelet, LastLayerView } from '@/types'
 

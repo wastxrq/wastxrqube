@@ -15,10 +15,9 @@ const props = defineProps<{ facelets: string }>()
 
 const view = computed(() => lastLayerView(props.facelets))
 
-// Layout geometry (0-100 viewBox): a background panel with the U-layer grid in the
-// middle and a thin colored flap strip on each side, showing the adjacent side
-// stickers — same structure as cube-trainer's original CaseDiagram.vue prototype,
-// adapted to this project's percentage-sized/no-size-prop SVG convention.
+// Layout geometry (0-100 viewBox): a background panel with the U-layer grid
+// in the middle and a thin colored flap strip on each side for the adjacent
+// side stickers.
 const gridCells = computed(() =>
   view.value.grid.map((facelet, i) => ({
     ...getGridCellRect(i),
@@ -55,12 +54,10 @@ const rightFlaps = computed(() =>
   })),
 )
 
-// Permutation arrows, overlaid on the grid: a 2-cycle (simple swap) is a straight
-// double-headed line. A cycle of 3+ pieces (a 3-cycle for Ua/Ub/Aa/Ab, or the
-// G-perms' 4-piece edge zigzag) draws its full closed loop of one straight segment
-// per piece (A to B, B to C, ..., back to A) — every piece's move is shown, none
-// left implied. Direction is what tells a case apart from its mirror (Aa/Ab,
-// Ga/Gb, ...): same segments, arrowheads on the opposite ends.
+// Permutation arrows: a 2-cycle is a straight double-headed line; a cycle of
+// 3+ pieces draws its full closed loop, one segment per piece, so no move is
+// left implied. Direction is what tells a case apart from its mirror
+// (Aa/Ab, Ga/Gb, ...): same segments, arrowheads on opposite ends.
 const arrowheadId = useId()
 
 function cycleSegments(cycle: number[], keyPrefix: string) {

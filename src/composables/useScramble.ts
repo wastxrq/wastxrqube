@@ -3,12 +3,10 @@ import type { ScrambleEvent } from '@/types'
 import { ref } from 'vue'
 
 /**
- * Reactive wrapper around lib/scramble.ts's WCA-style random-state scrambler.
- * Generates one scramble immediately on creation; call `generate()` again to
- * replace it (e.g. a manual "new scramble" click, or after a solve completes).
- * `isLoading` is true for the whole in-flight duration — callers should gate
- * starting a solve on it rather than assume `scramble` is populated
- * synchronously, since generation isn't instant (see lib/scramble.ts).
+ * Reactive wrapper around lib/scramble.ts's scrambler. Generates one scramble
+ * immediately on creation; call `generate()` again to replace it. `isLoading`
+ * is true for the whole in-flight duration — callers should gate starting a
+ * solve on it rather than assume `scramble` is populated synchronously.
  */
 export function useScramble(event: ScrambleEvent = '333') {
   const scramble = ref('')

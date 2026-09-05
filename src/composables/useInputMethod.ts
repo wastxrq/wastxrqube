@@ -2,13 +2,10 @@ import { ref } from 'vue'
 
 /**
  * Whether the user's most recent input was touch/pen rather than a keyboard —
- * a single app-wide signal (not per-component state), since it should stay in
- * sync no matter which view first noticed it, and shouldn't cost a new set of
- * global listeners every time a component mounts. Seeded from
- * `matchMedia('(pointer: coarse)')` (the device's primary pointer) and then
- * kept live by whichever actually happens first — a touch/pen pointer, or a
- * keypress — so a 2-in-1 laptop that switches between touch and a physical
- * keyboard updates instead of staying stuck on its initial guess.
+ * a single app-wide signal, not per-component state, so it stays in sync
+ * without a new set of global listeners per mount. Seeded from
+ * `matchMedia('(pointer: coarse)')`, then kept live by whichever actually
+ * happens first, so a 2-in-1 laptop updates instead of sticking to its guess.
  */
 const isTouch = ref(matchesCoarsePointer())
 
@@ -39,7 +36,7 @@ function startListening() {
   })
 }
 
-/** Reactive `{ isTouch }` reflecting the user's current input method — see the `isTouch` doc comment above. */
+/** Reactive `{ isTouch }` reflecting the user's current input method. */
 export function useInputMethod() {
   startListening()
   return { isTouch }

@@ -15,8 +15,8 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
   )
   const currentCaseId = ref<number | null>(null)
   const currentScramble = ref('')
-  // Fixed at startRecap() time; deliberately not reactive against later selectedCases
-  // changes mid-pass, so toggling a case during an active recap can't mutate the queue out from under you.
+  // Fixed at startRecap() time, not reactive to later selectedCases changes —
+  // toggling a case mid-pass can't mutate the queue out from under you.
   const recapQueue = ref<number[]>([])
   const lastRecapAt = ref<number | null>(null)
   const storeInitAt = Date.now()

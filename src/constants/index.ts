@@ -1,5 +1,6 @@
 export * from './cube'
-export * from './lastLayerDiagram.constant'
+export * from './lastLayerDiagram'
+export * from './rotationRemap'
 export * from './storage'
 export * from './timer'
 export * from './ui'

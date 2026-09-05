@@ -4,24 +4,12 @@ import { onMounted, onUnmounted } from 'vue'
 import type { useHoldTimer } from './useHoldTimer'
 
 /**
- * Wires a useHoldTimer instance up to both the Space bar (desktop) and a
- * touch/pen hold gesture — shared by TimerView, OllTrainerView and
- * PllTrainerView, which all drive the same hold-to-start state machine and,
- * until now, only had a keyboard path (no way to start/stop a solve on a
- * touchscreen at all). Returns pointer handlers to bind on the tappable timer
- * area in the template; the Space-bar listener self-registers on window like
- * useDeleteHotkey does, so callers don't need to wire that part themselves.
- *
- * Deliberately ignores `pointerType === 'mouse'` — this only adds touch/pen
- * support, it doesn't give desktop mouse users a new way to start a solve
- * (keeping the existing keyboard/mouse experience exactly as it was).
- *
- * While inspecting, also tracks a left-to-right swipe as a touch equivalent
- * of Esc — both call `onCancelKey`, so this is a no-op wherever `onCancelKey`
- * isn't provided (only TimerView currently passes it; OllTrainerView/
- * PllTrainerView's `useHoldTimer()` calls don't set `inspectionMs`, so their
- * timer never reaches 'inspecting' and the gesture never has anything to
- * trigger — same as Esc already does nothing there today).
+ * Wires a useHoldTimer instance to both the Space bar and a touch/pen hold
+ * gesture, shared by TimerView/OllTrainerView/PllTrainerView. Deliberately
+ * ignores `pointerType === 'mouse'` — this only adds touch/pen support, not
+ * a new way to start a solve with a mouse. While inspecting, also tracks a
+ * left-to-right swipe as a touch equivalent of Esc (both call `onCancelKey`);
+ * a no-op wherever `onCancelKey` isn't passed.
  */
 export function useHoldTimerInput(
   timer: ReturnType<typeof useHoldTimer>,
@@ -65,8 +53,7 @@ export function useHoldTimerInput(
     window.removeEventListener('keyup', onWindowKeyup)
   })
 
-  // Swipe-to-cancel tracking, active only while inspecting (hold-to-start
-  // already owns the touch zone in every other state — see the doc comment above).
+  // Swipe-to-cancel tracking, active only while inspecting.
   let swipeStartX = 0
   let swipeStartY = 0
   let swipeTracking = false
@@ -83,9 +70,8 @@ export function useHoldTimerInput(
   }
   function onPointerMove(e: PointerEvent) {
     if (e.pointerType === 'mouse' || !swipeTracking) return
-    // Re-checked live (not just at pointerdown) — once cancelled, state flips
-    // to 'idle' and this stops matching, so a lingering finger-down after the
-    // gesture fires can't re-trigger onCancelKey on a later move event.
+    // Re-checked live so a lingering finger-down after the gesture fires
+    // can't re-trigger onCancelKey on a later move event.
     if (timer.state.value !== 'inspecting') {
       swipeTracking = false
       return
