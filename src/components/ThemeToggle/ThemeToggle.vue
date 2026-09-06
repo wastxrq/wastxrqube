@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MoonIcon, SunIcon } from '@/components/icons'
+import { MoonIcon, SunIcon } from '@/components'
 import { setTheme, theme } from '@/theme'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'

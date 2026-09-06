@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { LanguageSwitcher, ThemeToggle } from '@/components'
-import { LogoBoldIcon } from '@/components/icons'
+import { LanguageSwitcher, LogoBoldIcon, ThemeToggle } from '@/components'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 

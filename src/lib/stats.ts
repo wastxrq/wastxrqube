@@ -1,19 +1,13 @@
 import type { Solve } from '@/types'
 
-/**
- * Effective time in ms for a solve, honoring DNF/+2 penalties.
- * Returns Infinity for DNF.
- **/
+/** Effective time in ms for a solve, honoring DNF/+2 penalties. DNF returns Infinity. */
 export function effectiveTime(solve: Solve): number {
   if (solve.penalty === 'DNF') return Infinity
   if (solve.penalty === '+2') return solve.time + 2000
   return solve.time
 }
 
-/**
- * WCA-style average of the last n solves (chronological array, oldest first).
- * Null if fewer than n solves exist.
- **/
+/** WCA-style average of the last n solves (oldest first). Null if fewer than n exist. */
 export function average(solves: Solve[], n: number): number | null {
   if (solves.length < n) return null
   const window = solves.slice(-n)
@@ -28,19 +22,14 @@ export function average(solves: Solve[], n: number): number | null {
   return sum / trimmed.length
 }
 
-/**
- * Best (lowest) effective time across all solves, ignoring DNFs.
- * Null if every solve is a DNF or there are none.
- **/
+/** Best (lowest) effective time, ignoring DNFs. Null if every solve is a DNF or none exist. */
 export function best(solves: Solve[]): number | null {
   const times = solves.map(effectiveTime).filter((t) => t !== Infinity)
   if (!times.length) return null
   return Math.min(...times)
 }
 
-/**
- * Best n-solve average achieved anywhere across the solve history (a sliding-window minimum).
- */
+/** Best n-solve average achieved anywhere in the solve history (sliding-window minimum). */
 export function bestAverage(solves: Solve[], n: number): number | null {
   let b: number | null = null
   for (let i = n; i <= solves.length; i++) {
@@ -50,10 +39,7 @@ export function bestAverage(solves: Solve[], n: number): number | null {
   return b
 }
 
-/**
- * Mean of all solves. Infinity if any is a DNF (unlike average(),
- * which only trims outliers, mean is thrown off entirely).
- */
+/** Mean of all solves; Infinity if any is a DNF (unlike average(), which only trims outliers). */
 export function mean(solves: Solve[]): number | null {
   const times = solves.map(effectiveTime)
   if (!times.length) return null

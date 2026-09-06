@@ -13,10 +13,8 @@ const props = defineProps<{ facelets: string }>()
 
 const view = computed(() => lastLayerView(props.facelets))
 
-// Layout geometry mirrors PllCaseDiagram.vue's flap strips, so cases with a
-// similar top pattern but different piece orientations remain visually
-// distinguishable. OLL keeps its binary on/off color scheme instead of the
-// full sticker colors PLL uses.
+// Layout geometry mirrors PllCaseDiagram.vue's flap strips; OLL keeps its
+// binary on/off color scheme instead of PLL's full sticker colors.
 const gridCells = computed(() =>
   view.value.grid.map((facelet, i) => ({
     ...getGridCellRect(i),

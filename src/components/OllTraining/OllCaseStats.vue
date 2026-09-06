@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { CollapsiblePanel } from '@/components'
 import { formatTime, pluralizeUk } from '@/lib'
 import { useOllPracticeStore } from '@/stores'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { CollapsiblePanel } from '../CollapsiblePanel'
 
 const store = useOllPracticeStore()
 const { t } = useI18n()

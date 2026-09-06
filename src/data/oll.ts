@@ -1,9 +1,8 @@
 /**
- * * OLL (Orientation of Last Layer) algorithm data.
- * * Case numbers follow the common speedsolving.com numbering (1-57).
+ * OLL algorithm data. Case numbers follow the common speedsolving.com numbering (1-57).
  */
 
-import type { OllCase, OllGroup } from '@/types'
+import type { CubeCase, OllGroup } from '@/types'
 
 export const ollGroups: OllGroup[] = [
   { name: 'All Edges Oriented', cases: [26, 27, 21, 22, 24, 25, 23] },
@@ -22,7 +21,7 @@ export const ollGroups: OllGroup[] = [
   { name: 'No Edges Flipped', cases: [1, 2, 3, 4, 18, 19, 17, 20] },
 ]
 
-export const ollCases: Record<number, OllCase> = {
+export const ollCases: Record<number, CubeCase> = {
   1: { name: 'Runway', algs: ["R U2 R2 F R F' U2 R' F R F'"] },
   2: { name: 'Zamboni', algs: ["F R U R' U' F' f R U R' U' f'", "y r U r' U2 R U2 R' U2 r U' r'"] },
   3: { name: 'Anti-Mouse', algs: ["f R U R' U' f' U' F R U R' U' F'"] },

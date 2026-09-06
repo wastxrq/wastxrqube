@@ -1,6 +1,4 @@
-// Shared 0-100 viewBox geometry for OllCaseDiagram.vue and PllCaseDiagram.vue: a
-// background panel with the U-layer grid in the middle and a thin flap strip on
-// each side, showing the adjacent side stickers.
+// Shared 0-100 viewBox geometry for OllCaseDiagram.vue and PllCaseDiagram.vue.
 const MARGIN = 4
 const FLAP = 10
 const GAP = 1.5

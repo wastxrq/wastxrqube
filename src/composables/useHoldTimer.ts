@@ -1,28 +1,21 @@
-import {
-  DEFAULT_HOLD_MS,
-  INSPECTION_DNF_THRESHOLD_MS,
-  INSPECTION_PLUS_TWO_THRESHOLD_MS,
-} from '@/constants'
+import { TIMER_CONSTANTS } from '@/constants'
 import type { SolvePenalty, TimerState, UseHoldTimerOptions } from '@/types'
 import { ref } from 'vue'
 
 function inspectionPenalty(inspectionMs: number): SolvePenalty {
-  if (inspectionMs > INSPECTION_DNF_THRESHOLD_MS) return 'DNF'
-  if (inspectionMs > INSPECTION_PLUS_TWO_THRESHOLD_MS) return '+2'
+  if (inspectionMs > TIMER_CONSTANTS.INSPECTION_DNF_THRESHOLD_MS) return 'DNF'
+  if (inspectionMs > TIMER_CONSTANTS.INSPECTION_PLUS_TWO_THRESHOLD_MS) return '+2'
   return 'none'
 }
 
 /**
  * Hold-to-start timer state machine, cstimer/stackmat style.
- * States: idle -> holding (press+wait) -> ready (green, release to start)
- *         -> [inspecting (press+wait+release again), only if inspectionMs is set] ->
- *         running -> idle (press again, or release after start, to stop)
- *
- * When inspectionMs is set, `armed` turns true once the second hold (during
- * inspecting) clears holdMs — release only starts the solve once armed.
+ * idle -> holding -> ready -> [inspecting, if inspectionMs is set] -> running -> idle.
+ * When inspectionMs is set, `armed` turns true once the second hold clears
+ * holdMs — release only starts the solve once armed.
  */
 export function useHoldTimer({
-  holdMs = DEFAULT_HOLD_MS,
+  holdMs = TIMER_CONSTANTS.DEFAULT_HOLD_MS,
   inspectionMs,
   onComplete,
 }: UseHoldTimerOptions = {}) {
@@ -125,11 +118,7 @@ export function useHoldTimer({
     pointerDown = false
   }
 
-  /**
-   * Backs out of inspection with no solve logged and no penalty — a no-op from
-   * any other state, since only 'inspecting' has a pending attempt worth
-   * discarding (a 'running' solve stops via press()/Space, per existing behavior).
-   */
+  /** Backs out of inspection with no solve logged — a no-op in any other state. */
   function cancel() {
     if (state.value !== 'inspecting') return
     if (holdTimer) clearTimeout(holdTimer)

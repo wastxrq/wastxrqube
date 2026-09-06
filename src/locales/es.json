@@ -22,7 +22,10 @@
   "timer": {
     "title": "Timer",
     "hintIdle": "Espacio — iniciar/detener · Supr/Retroceso — eliminar la última resolución",
-    "hintInspecting": "Espacio — empezar a resolver"
+    "hintIdleTouch": "Mantén pulsado el cronómetro para empezar",
+    "hintInspecting": "Espacio — empezar a resolver",
+    "hintInspectingTouch": "Mantén pulsado el cronómetro para empezar a resolver",
+    "swipeCancelHint": "Desliza a la derecha para cancelar →"
   },
   "stats": {
     "mean": "media",
@@ -36,6 +39,8 @@
     "hideAlg": "Ocultar algoritmo",
     "skip": "Omitir →",
     "hint": "Espacio — iniciar/detener · Supr/Retroceso — eliminar el último resultado",
+    "hintTouch": "Mantén pulsado el cronómetro para empezar",
+    "undoButton": "Deshacer el último",
     "statSolved": "resueltos",
     "statBest": "mejor",
     "statMean": "media",
@@ -59,6 +64,8 @@
     "hideAlg": "Ocultar algoritmo",
     "skip": "Omitir →",
     "hint": "Espacio — iniciar/detener · Supr/Retroceso — eliminar el último resultado",
+    "hintTouch": "Mantén pulsado el cronómetro para empezar",
+    "undoButton": "Deshacer el último",
     "statSolved": "resueltos",
     "statBest": "mejor",
     "statMean": "media",

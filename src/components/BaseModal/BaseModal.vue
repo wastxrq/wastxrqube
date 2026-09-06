@@ -12,10 +12,8 @@ function close() {
 }
 
 // Captured (not bubbled) so this reaches window before any other page-level
-// Escape handler (e.g. TimerView's inspection-cancel) — capture always runs
-// before bubble, regardless of which listener happened to register first —
-// and stopImmediatePropagation keeps this modal's Escape from also triggering
-// whatever's underneath it once it actually closes something.
+// Escape handler; stopImmediatePropagation keeps it from also triggering
+// whatever's underneath once it actually closes something.
 function onKeydown(e: KeyboardEvent) {
   if (!props.open || e.key !== 'Escape') return
   e.stopImmediatePropagation()
@@ -60,13 +58,17 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown, true))
 }
 .modal-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   color: var(--muted);
   font-size: 0.8rem;
-  padding: 4px;
 }
 .modal-close:hover {
   color: var(--text);

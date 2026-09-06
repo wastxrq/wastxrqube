@@ -1,13 +1,10 @@
 /**
- * * PLL (Permutation of the Last Layer) algorithm data.
- * * Every algorithm here was validated against cubejs: applied to a solved cube, the
- * * entire "bottom two layers" (D face + non-top rows of R/F/L/B) comes back byte-for-byte
- * * unchanged, and the U face stays fully U-colored (co/eo all zero — pure permutation,
- * * no twists/flips), matching the OLL validation pass's rigor for this project's stricter
- * * PLL requirement.
+ * PLL algorithm data. Every algorithm was validated against cubejs: the
+ * bottom two layers come back byte-for-byte unchanged, and the U face stays
+ * fully U-colored (co/eo all zero — pure permutation, no twists/flips).
  */
 
-import type { PllCase, PllGroup } from '@/types'
+import type { CubeCase, PllGroup } from '@/types'
 
 export const pllGroups: PllGroup[] = [
   { name: 'Edges Only', cases: ['H', 'Ua', 'Ub', 'Z'] },
@@ -17,7 +14,7 @@ export const pllGroups: PllGroup[] = [
   { name: 'Diagonal Corner Swap', cases: ['Na', 'Nb', 'V', 'Y'] },
 ]
 
-export const pllCases: Record<string, PllCase> = {
+export const pllCases: Record<string, CubeCase> = {
   Aa: { name: 'Aa Perm', algs: ["x' R2 D2 R' U' R D2 R' U R' x"] },
   Ab: { name: 'Ab Perm', algs: ["x' R U' R D2 R' U R D2 R2 x"] },
   E: { name: 'E Perm', algs: ["x' R U' R' D R U R' D' R U R' D R U' R' D' x"] },

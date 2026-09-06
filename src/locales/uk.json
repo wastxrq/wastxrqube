@@ -22,7 +22,10 @@
   "timer": {
     "title": "Timer",
     "hintIdle": "Space — старт/стоп · Delete/Backspace — видалити останній розв'язок",
-    "hintInspecting": "Space — почати розв'язання"
+    "hintIdleTouch": "Утримуйте таймер, щоб почати",
+    "hintInspecting": "Space — почати розв'язання",
+    "hintInspectingTouch": "Утримуйте таймер, щоб почати розв'язання",
+    "swipeCancelHint": "Проведіть праворуч, щоб скасувати →"
   },
   "stats": {
     "mean": "mean",
@@ -36,6 +39,8 @@
     "hideAlg": "Сховати алгоритм",
     "skip": "Пропустити →",
     "hint": "Space — старт/стоп · Delete/Backspace — видалити останній результат",
+    "hintTouch": "Утримуйте таймер, щоб почати",
+    "undoButton": "Скасувати останній",
     "statSolved": "розв'язано",
     "statBest": "найкращий",
     "statMean": "середній",
@@ -59,6 +64,8 @@
     "hideAlg": "Сховати алгоритм",
     "skip": "Пропустити →",
     "hint": "Space — старт/стоп · Delete/Backspace — видалити останній результат",
+    "hintTouch": "Утримуйте таймер, щоб почати",
+    "undoButton": "Скасувати останній",
     "statSolved": "розв'язано",
     "statBest": "найкращий",
     "statMean": "середній",

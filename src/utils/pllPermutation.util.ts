@@ -6,9 +6,8 @@ const EDGE_INDICES = [1, 3, 5, 7]
 
 type FlapSide = 'top' | 'bottom' | 'left' | 'right'
 
-// Which flap cell(s) border each non-center grid index — mirrors the adjacency
-// PllCaseDiagram.vue's own flap layout already encodes (see lastLayerView.ts):
-// a corner touches the two flap cells along the sides it borders, an edge touches one.
+// Which flap cell(s) border each non-center grid index (see lastLayerView.ts) —
+// a corner touches the two flap cells along its sides, an edge touches one.
 const SIDES: Record<number, [FlapSide, number][]> = {
   0: [
     ['top', 0],
@@ -46,11 +45,9 @@ const HOME_OF_TUPLE = new Map<string, number>(
 )
 
 /**
- * Maps each of the 8 non-center grid positions to the position it belongs at when
- * solved, identifying the piece at each position by its side color(s) (a corner's
- * unordered pair, an edge's single color) — unambiguous because PLL never twists or
- * flips a piece (see src/data/pll.ts's validation note), so a piece's side colors
- * always land on the matching slot's colors, never a rotated/mirrored variant of them.
+ * Maps each of the 8 non-center grid positions to its solved position, identified
+ * by side color(s) (a corner's unordered pair, an edge's color) — unambiguous
+ * because PLL never twists or flips a piece (see data/pll.ts's validation note).
  */
 function homePositions(facelets: string): Map<number, number> {
   const view = lastLayerView(facelets)
@@ -89,9 +86,8 @@ export interface PllPermutation {
 
 /**
  * The corner-only and edge-only permutation cycles a PLL case's facelets encode,
- * as grid indices (see lastLayerView.ts's 0-8 layout) in the order pieces travel
- * to reach their solved slot. PLL never mixes corners and edges into the same
- * cycle, so the two piece types are tracked independently.
+ * as grid indices (see lastLayerView.ts's 0-8 layout), tracked independently
+ * since PLL never mixes corners and edges into the same cycle.
  */
 export function pllPermutationCycles(facelets: string): PllPermutation {
   const home = homePositions(facelets)

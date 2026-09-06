@@ -1,22 +1,16 @@
-import {
-  AO100_WINDOW,
-  AO12_WINDOW,
-  AO5_WINDOW,
-  DEFAULT_SESSION_NAME,
-  LOCAL_STORAGE_KEYS,
-} from '@/constants'
+import { LOCAL_STORAGE_KEYS, TIMER_CONSTANTS } from '@/constants'
 import { average, best, loadJson, mean, saveJson } from '@/lib'
 import type { PersistedTimerState, SolvePenalty, TimerSession } from '@/types'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 
 function defaultSessions(): TimerSession[] {
-  return [{ name: DEFAULT_SESSION_NAME, solves: [] }]
+  return [{ name: TIMER_CONSTANTS.DEFAULT_SESSION_NAME, solves: [] }]
 }
 
 export const useTimerSessionsStore = defineStore('timerSessions', () => {
   const persisted = loadJson<PersistedTimerState>(LOCAL_STORAGE_KEYS.TIMER_SESSIONS_STORAGE_KEY, {
-    activeSessionName: DEFAULT_SESSION_NAME,
+    activeSessionName: TIMER_CONSTANTS.DEFAULT_SESSION_NAME,
     sessions: defaultSessions(),
   })
   const sessions = ref<TimerSession[]>(
@@ -71,9 +65,9 @@ export const useTimerSessionsStore = defineStore('timerSessions', () => {
     if (activeSessionName.value === name) activeSessionName.value = sessions.value[0]!.name
   }
 
-  const ao5 = computed(() => average(solves.value, AO5_WINDOW))
-  const ao12 = computed(() => average(solves.value, AO12_WINDOW))
-  const ao100 = computed(() => average(solves.value, AO100_WINDOW))
+  const ao5 = computed(() => average(solves.value, TIMER_CONSTANTS.AO5_WINDOW))
+  const ao12 = computed(() => average(solves.value, TIMER_CONSTANTS.AO12_WINDOW))
+  const ao100 = computed(() => average(solves.value, TIMER_CONSTANTS.AO100_WINDOW))
   const meanTime = computed(() => mean(solves.value))
   const bestTime = computed(() => best(solves.value))
 

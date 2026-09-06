@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { AppButton } from '@/components/AppButton'
+import { AppButton, BaseModal, PenaltyToggle } from '@/components'
 import { scrambledFacelets } from '@/cube'
 import { effectiveTime, formatDate, formatTime } from '@/lib'
 import { useTimerSessionsStore } from '@/stores'
 import type { Solve } from '@/types'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BaseModal } from '../BaseModal'
 import CubeNet from './CubeNet.vue'
 
 const props = defineProps<{ solve: Solve | null }>()
@@ -58,12 +57,7 @@ function remove() {
       </div>
 
       <div class="modal-actions">
-        <AppButton :class="{ active: solve.penalty === '+2' }" @click="setPenalty('+2')">
-          +2
-        </AppButton>
-        <AppButton :class="{ active: solve.penalty === 'DNF' }" @click="setPenalty('DNF')">
-          DNF
-        </AppButton>
+        <PenaltyToggle :penalty="solve.penalty" app-button show-active @set-penalty="setPenalty" />
         <AppButton variant="danger" @click="remove">{{ t('solveDetail.delete') }}</AppButton>
       </div>
     </template>

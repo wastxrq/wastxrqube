@@ -1,4 +1,4 @@
-import { LOCAL_STORAGE_KEYS, RECENT_MEAN_WINDOW, SLOW_THRESHOLD_FACTOR } from '@/constants'
+import { LOCAL_STORAGE_KEYS, RECENT_MEAN_WINDOW, TIMER_CONSTANTS } from '@/constants'
 import { scrambleForAlg } from '@/cube/engine'
 import { ollCases, ollGroups } from '@/data/oll'
 import { loadJson, saveJson } from '@/lib/storage'
@@ -15,8 +15,8 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
   )
   const currentCaseId = ref<number | null>(null)
   const currentScramble = ref('')
-  // Fixed at startRecap() time; deliberately not reactive against later selectedCases
-  // changes mid-pass, so toggling a case during an active recap can't mutate the queue out from under you.
+  // Fixed at startRecap() time, not reactive to later selectedCases changes —
+  // toggling a case mid-pass can't mutate the queue out from under you.
   const recapQueue = ref<number[]>([])
   const lastRecapAt = ref<number | null>(null)
   const storeInitAt = Date.now()
@@ -109,7 +109,8 @@ export const useOllPracticeStore = defineStore('ollPractice', () => {
         continue
       }
       const avg = caseAverageBefore(attempt.caseId, attempt.timestamp)
-      if (avg !== null && attempt.ms > avg * SLOW_THRESHOLD_FACTOR) flagged.add(attempt.caseId)
+      if (avg !== null && attempt.ms > avg * TIMER_CONSTANTS.SLOW_THRESHOLD_FACTOR)
+        flagged.add(attempt.caseId)
     }
     return flagged
   }

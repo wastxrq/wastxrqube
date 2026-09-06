@@ -1,12 +1,9 @@
-// Import the cube.js submodule directly rather than the package's main
-// entry point. The main entry also pulls in cubejs's lib/solve.js, whose
-// top-level `this.Cube || require('./cube')` relies on an implicit `this`
-// binding that Vite's bundler doesn't provide, crashing with
-// "Cannot read properties of undefined (reading 'Cube')". We don't use
-// solve.js's Cube#solve()/Cube.scramble() (randomScramble() below is our
-// own), so importing cube.js alone sidesteps the bug entirely.
+// cubejs's main entry pulls in lib/solve.js, whose top-level `this.Cube ||
+// require('./cube')` breaks under Vite (no implicit `this`) — importing
+// lib/cube directly sidesteps it; we don't use solve.js anyway.
 // @ts-expect-error -- cubejs ships no type declarations
 import Cube from 'cubejs/lib/cube'
+import { ROTATION_REMAP } from '../constants'
 
 /** Strip decorative parentheses/whitespace so cubejs can parse an alg string. */
 export function normalizeAlg(alg: string): string {
@@ -16,11 +13,9 @@ export function normalizeAlg(alg: string): string {
 const faceletsCache = new Map<string, string>()
 
 /**
- * Given an OLL/PLL algorithm, returns the 54-char facelet string of the
- * "case" it solves: apply the algorithm's inverse to a solved cube, then
- * upright the cube (undo any whole-cube y/x/z rotation baked into the alg)
- * so every case is always pictured from the same F-front, U-top view.
- * Executing the original algorithm from this state always returns to solved.
+ * Applies the alg's inverse to a solved cube, then uprights it (undoes any
+ * embedded y/x/z) so every case pictures from the same F/U view — running
+ * the original alg from this state always returns to solved.
  */
 export function caseFaceletsForAlg(alg: string): string {
   const clean = normalizeAlg(alg)
@@ -38,9 +33,8 @@ export function caseFaceletsForAlg(alg: string): string {
 
 const pllFaceletsCache = new Map<string, string>()
 
-// cubejs's own corner/edge indices 0-3 are exactly URF/UFL/ULB/UBR and UR/UF/UL/UB
-// (see cube.js's own [URF, UFL, ULB, UBR, ...] / [UR, UF, UL, UB, ...] index tables) —
-// i.e. the last layer's 4 corners and 4 edges, with index === solved position.
+// cubejs indices 0-3 are exactly the last layer's 4 corners/edges (URF/UFL/ULB/UBR
+// and UR/UF/UL/UB), with index === solved position.
 const LAST_LAYER_PIECE_INDICES = [0, 1, 2, 3]
 const AUF_CORRECTIONS = ['U', 'U2', "U'"]
 
@@ -56,23 +50,17 @@ function displacedPieceCounts(c: InstanceType<typeof Cube>): { corner: number; e
 }
 
 /**
- * Like caseFaceletsForAlg, but additionally normalizes away any leftover AUF: some
- * PLL algorithms have a net whole-U-layer rotation baked into their own move count
- * that caseFaceletsForAlg's upright() doesn't undo (upright only fixes which face
- * is F/U, not U-layer spin). Left uncorrected, a handful of cases (Jb, Ra, Rb, Z in
- * this project's data) render with pieces that look like they cycle but don't — e.g.
- * Z showing all 4 corners in a rotated 4-cycle instead of fixed, contradicting its
- * own "Edges Only" category. Trying all 4 AUF angles and keeping whichever leaves
- * the fewest last-layer pieces displaced recovers each case's true, minimal shape.
+ * Like caseFaceletsForAlg, but also normalizes leftover AUF: some PLL algs
+ * (Jb, Ra, Rb, Z) have a net U-layer spin that upright() doesn't undo, making
+ * fixed pieces look like they cycle. Trying all 4 AUF angles and keeping the
+ * one with fewest last-layer pieces displaced recovers the true minimal shape.
  *
- * Total displaced piece count alone doesn't always pick a unique angle: the G perms
- * tie at 6 pieces displaced between a corner-2-swap + edge-4-cycle split and a
- * corner-3-cycle + edge-3-cycle split (verified against cubejs's raw cp/ep for every
- * AUF angle on Ga/Gb/Gc/Gd — both splits sum to 6, only the 3+3 split matches the
- * standard reference-sheet "double 3-cycle" G perm diagram). Preferring the more
- * balanced corner/edge split as a tiebreak resolves that without affecting any other
- * PLL case (checked against every case in src/data/pll.ts: the tiebreak only ever
- * changes which of several equally-minimal angles is picked, never picks a worse one).
+ * Total displaced count alone doesn't pick a unique angle: the G perms tie at
+ * 6 displaced pieces between a corner-2-swap+edge-4-cycle split and a
+ * corner-3-cycle+edge-3-cycle split (verified via cubejs's cp/ep at every AUF
+ * angle) — only the 3+3 split matches the reference "double 3-cycle" G perm.
+ * Preferring the more balanced split as a tiebreak resolves this without
+ * affecting any other case (checked against every case in data/pll.ts).
  */
 export function canonicalPllCaseFacelets(alg: string): string {
   const clean = normalizeAlg(alg)
@@ -101,297 +89,6 @@ export function canonicalPllCaseFacelets(alg: string): string {
   return facelets
 }
 
-// How a move token transforms under a whole-cube rotation, keyed by rotation
-// label then by the token being resolved (e.g. ROTATION_REMAP.y.R === 'B'
-// means "R" performed after a "y" rotation has the same effect as plain "B").
-// Generated from and verified against cubejs's own move simulation (applying
-// `rotation TOKEN rotation'` must equal applying the table's plain output) —
-// see the derivation in the scrambleForAlg() doc comment below.
-const ROTATION_REMAP: Record<string, Record<string, string>> = {
-  y: {
-    U: 'U',
-    U2: 'U2',
-    "U'": "U'",
-    D: 'D',
-    D2: 'D2',
-    "D'": "D'",
-    R: 'B',
-    R2: 'B2',
-    "R'": "B'",
-    L: 'F',
-    L2: 'F2',
-    "L'": "F'",
-    F: 'R',
-    F2: 'R2',
-    "F'": "R'",
-    B: 'L',
-    B2: 'L2',
-    "B'": "L'",
-    u: 'u',
-    u2: 'u2',
-    "u'": "u'",
-    d: 'd',
-    d2: 'd2',
-    "d'": "d'",
-    r: 'b',
-    r2: 'b2',
-    "r'": "b'",
-    l: 'f',
-    l2: 'f2',
-    "l'": "f'",
-    f: 'r',
-    f2: 'r2',
-    "f'": "r'",
-    b: 'l',
-    b2: 'l2',
-    "b'": "l'",
-    M: 'S',
-    M2: 'S2',
-    "M'": "S'",
-    S: "M'",
-    S2: 'M2',
-    "S'": 'M',
-    E: 'E',
-    E2: 'E2',
-    "E'": "E'",
-  },
-  "y'": {
-    U: 'U',
-    U2: 'U2',
-    "U'": "U'",
-    D: 'D',
-    D2: 'D2',
-    "D'": "D'",
-    R: 'F',
-    R2: 'F2',
-    "R'": "F'",
-    L: 'B',
-    L2: 'B2',
-    "L'": "B'",
-    F: 'L',
-    F2: 'L2',
-    "F'": "L'",
-    B: 'R',
-    B2: 'R2',
-    "B'": "R'",
-    u: 'u',
-    u2: 'u2',
-    "u'": "u'",
-    d: 'd',
-    d2: 'd2',
-    "d'": "d'",
-    r: 'f',
-    r2: 'f2',
-    "r'": "f'",
-    l: 'b',
-    l2: 'b2',
-    "l'": "b'",
-    f: 'l',
-    f2: 'l2',
-    "f'": "l'",
-    b: 'r',
-    b2: 'r2',
-    "b'": "r'",
-    M: "S'",
-    M2: 'S2',
-    "M'": 'S',
-    S: 'M',
-    S2: 'M2',
-    "S'": "M'",
-    E: 'E',
-    E2: 'E2',
-    "E'": "E'",
-  },
-  y2: {
-    U: 'U',
-    U2: 'U2',
-    "U'": "U'",
-    D: 'D',
-    D2: 'D2',
-    "D'": "D'",
-    R: 'L',
-    R2: 'L2',
-    "R'": "L'",
-    L: 'R',
-    L2: 'R2',
-    "L'": "R'",
-    F: 'B',
-    F2: 'B2',
-    "F'": "B'",
-    B: 'F',
-    B2: 'F2',
-    "B'": "F'",
-    u: 'u',
-    u2: 'u2',
-    "u'": "u'",
-    d: 'd',
-    d2: 'd2',
-    "d'": "d'",
-    r: 'l',
-    r2: 'l2',
-    "r'": "l'",
-    l: 'r',
-    l2: 'r2',
-    "l'": "r'",
-    f: 'b',
-    f2: 'b2',
-    "f'": "b'",
-    b: 'f',
-    b2: 'f2',
-    "b'": "f'",
-    M: "M'",
-    M2: 'M2',
-    "M'": 'M',
-    S: "S'",
-    S2: 'S2',
-    "S'": 'S',
-    E: 'E',
-    E2: 'E2',
-    "E'": "E'",
-  },
-  x: {
-    U: 'F',
-    U2: 'F2',
-    "U'": "F'",
-    D: 'B',
-    D2: 'B2',
-    "D'": "B'",
-    R: 'R',
-    R2: 'R2',
-    "R'": "R'",
-    L: 'L',
-    L2: 'L2',
-    "L'": "L'",
-    F: 'D',
-    F2: 'D2',
-    "F'": "D'",
-    B: 'U',
-    B2: 'U2',
-    "B'": "U'",
-    u: 'f',
-    u2: 'f2',
-    "u'": "f'",
-    d: 'b',
-    d2: 'b2',
-    "d'": "b'",
-    r: 'r',
-    r2: 'r2',
-    "r'": "r'",
-    l: 'l',
-    l2: 'l2',
-    "l'": "l'",
-    f: 'd',
-    f2: 'd2',
-    "f'": "d'",
-    b: 'u',
-    b2: 'u2',
-    "b'": "u'",
-    M: 'M',
-    M2: 'M2',
-    "M'": "M'",
-    S: 'E',
-    S2: 'E2',
-    "S'": "E'",
-    E: "S'",
-    E2: 'S2',
-    "E'": 'S',
-  },
-  "x'": {
-    U: 'B',
-    U2: 'B2',
-    "U'": "B'",
-    D: 'F',
-    D2: 'F2',
-    "D'": "F'",
-    R: 'R',
-    R2: 'R2',
-    "R'": "R'",
-    L: 'L',
-    L2: 'L2',
-    "L'": "L'",
-    F: 'U',
-    F2: 'U2',
-    "F'": "U'",
-    B: 'D',
-    B2: 'D2',
-    "B'": "D'",
-    u: 'b',
-    u2: 'b2',
-    "u'": "b'",
-    d: 'f',
-    d2: 'f2',
-    "d'": "f'",
-    r: 'r',
-    r2: 'r2',
-    "r'": "r'",
-    l: 'l',
-    l2: 'l2',
-    "l'": "l'",
-    f: 'u',
-    f2: 'u2',
-    "f'": "u'",
-    b: 'd',
-    b2: 'd2',
-    "b'": "d'",
-    M: 'M',
-    M2: 'M2',
-    "M'": "M'",
-    S: "E'",
-    S2: 'E2',
-    "S'": 'E',
-    E: 'S',
-    E2: 'S2',
-    "E'": "S'",
-  },
-  x2: {
-    U: 'D',
-    U2: 'D2',
-    "U'": "D'",
-    D: 'U',
-    D2: 'U2',
-    "D'": "U'",
-    R: 'R',
-    R2: 'R2',
-    "R'": "R'",
-    L: 'L',
-    L2: 'L2',
-    "L'": "L'",
-    F: 'B',
-    F2: 'B2',
-    "F'": "B'",
-    B: 'F',
-    B2: 'F2',
-    "B'": "F'",
-    u: 'd',
-    u2: 'd2',
-    "u'": "d'",
-    d: 'u',
-    d2: 'u2',
-    "d'": "u'",
-    r: 'r',
-    r2: 'r2',
-    "r'": "r'",
-    l: 'l',
-    l2: 'l2',
-    "l'": "l'",
-    f: 'b',
-    f2: 'b2',
-    "f'": "b'",
-    b: 'f',
-    b2: 'f2',
-    "b'": "f'",
-    M: 'M',
-    M2: 'M2',
-    "M'": "M'",
-    S: "S'",
-    S2: 'S2',
-    "S'": 'S',
-    E: "E'",
-    E2: 'E2',
-    "E'": 'E',
-  },
-}
-
 const EXTRA_ROTATIONS = ['', 'y', "y'", 'y2'] as const
 
 /** Net quarter-turns (1-3) for a rotation token like "y2"/"x'"/"y", or null if `token` isn't a rotation. */
@@ -404,13 +101,11 @@ function rotationQuarters(token: string): number | null {
 }
 
 /**
- * Resolves whole-cube rotations (an optional leading `extraRotation` plus any
- * x/y/z already embedded in `tokens`) into an equivalent sequence of plain
- * face/slice turns, so the result never contains a literal rotation token.
- * Composition only supports a single rotation axis across the sequence
- * (true for every alg in this project's data — mixed x+y in one alg doesn't
- * occur); an unsupported second axis is left as a literal token rather than
- * risk an incorrect fold.
+ * Folds whole-cube rotations (`extraRotation` plus any x/y/z in `tokens`)
+ * into equivalent face/slice turns, so the result has no rotation tokens.
+ * Only a single rotation axis across the sequence is supported (true for
+ * every alg in this project's data) — an unsupported second axis is left
+ * as a literal token rather than risk an incorrect fold.
  */
 function foldRotations(tokens: string[], extraRotation: string): string[] {
   const sequence = extraRotation ? [extraRotation, ...tokens] : tokens
@@ -438,25 +133,19 @@ function foldRotations(tokens: string[], extraRotation: string): string[] {
 }
 
 /**
- * A scramble (pure face/slice turns — no y/x/z) that sets up the given OLL/PLL
- * algorithm's case on a physical cube: the algorithm's inverse, with a random
- * whole-cube y-rotation folded into the move letters (R conjugated to B, etc.)
- * for variety, so the same case doesn't always start from the same first move
- * or AUF. Folding a rotation this way doesn't move centers (it's still pure
- * face turns), so the U-layer orientation pattern comes out rotated relative
- * to the canonical diagram rather than solvable by `alg` verbatim — the same
- * AUF adjustment a solver would do by eye on a real cube, and exactly the
- * technique oll_trainer's timer.js used (applyRotationForAlgorithm), just
- * generalized here to cover the wide/slice moves (r, f, l, M, ...) that show
- * up in this project's alg data. Verified against cubejs: for every case in
- * src/data/oll.ts, the scrambled U-layer pattern always matches some 90°
- * rotation of caseFaceletsForAlg's canonical pattern.
+ * A scramble (pure face/slice turns) that sets up the given alg's case on a
+ * physical cube: the alg's inverse, with a random whole-cube y-rotation
+ * folded into the move letters for variety, so the same case doesn't always
+ * start the same way. Folding doesn't move centers, so the resulting U-layer
+ * pattern is rotated relative to the canonical diagram — the same AUF
+ * adjustment a solver does by eye. Verified against cubejs: for every case
+ * in data/oll.ts, the scrambled pattern always matches some 90° rotation of
+ * caseFaceletsForAlg's canonical pattern.
  */
 export function scrambleForAlg(alg: string): string {
   const inverted = (Cube.inverse(normalizeAlg(alg)) as string).split(' ')
-  // An alg with its own embedded x-rotation (rare — one OLL case) is left as-is
-  // rather than composed with an extra y-rotation, since this project's data
-  // never mixes both axes in one alg and mixed-axis composition isn't handled.
+  // An alg with its own embedded x-rotation (rare) skips the extra y-rotation —
+  // this project's data never mixes both axes in one alg.
   const hasEmbeddedX = inverted.some((t) => t[0] === 'x')
   const extraRotation = hasEmbeddedX
     ? ''

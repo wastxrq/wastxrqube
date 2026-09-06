@@ -1,19 +1,11 @@
 /**
- * * F2L (First Two Layers) algorithm data — reference sheet only, no
- * * practice/timer mode (see F2lGuideView.vue).
- * * Every algorithm here was validated against cubejs: applied to a solved cube,
- * * everything outside the U layer and the FR slot's own corner+edge (D's front-
- * * right corner, F's mid/bottom-right, R's mid/bottom-left) comes back byte-for-
- * * byte unchanged. Several source algorithms used a leading/embedded y-rotation
- * * as a "hold it like this" shorthand; those were folded into an equivalent
- * * pure R/F/U form (same ROTATION_REMAP technique as engine.ts's
- * * scrambleForAlg) so every case here is self-contained and FR-slot-centered.
- * * Also checked pairwise that no two cases resolve to the same U-layer+FR-slot
- * * state (stricter than the OLL/PLL validation passes, which didn't check for
- * * cross-case duplicates).
+ * F2L algorithm data — reference sheet only, no practice/timer mode.
+ * Every algorithm was validated against cubejs: applied to a solved cube,
+ * everything outside the U layer and the FR slot comes back byte-for-byte
+ * unchanged, and no two cases resolve to the same U-layer+FR-slot state.
  */
 
-import type { F2lCase, F2lGroup } from '@/types'
+import type { CubeCase, F2lGroup } from '@/types'
 
 export const f2lGroups: F2lGroup[] = [
   { labelKey: 'f2l.groups.cornerTopEdgeMatch', cases: [1, 2, 3, 4, 5, 6, 7, 8] },
@@ -24,7 +16,7 @@ export const f2lGroups: F2lGroup[] = [
   { labelKey: 'f2l.groups.bothMisplaced', cases: [37, 38, 39, 40, 41] },
 ]
 
-export const f2lCases: Record<number, F2lCase> = {
+export const f2lCases: Record<number, CubeCase> = {
   1: { name: 'Кейс 1', algs: ["U R U' R'"] },
   2: { name: 'Кейс 2', algs: ["F R' F' R"] },
   3: { name: 'Кейс 3', algs: ["U' R U R' U2 R U' R'"] },

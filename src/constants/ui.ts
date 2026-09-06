@@ -1,6 +1,5 @@
-// Case card diagram-square size, shared between CaseCard and the selector's card grid.
-// Scales fluidly between these bounds (via a CSS clamp()) so small screens keep the
-// compact size while large screens get bigger, more legible cards.
+// Case card diagram-square size (shared by CaseCard and the selector's grid),
+// scaled fluidly between these bounds via a CSS clamp().
 export const CASE_CARD_MIN_SIZE_PX = 110
 export const CASE_CARD_MAX_SIZE_PX = 160
 
