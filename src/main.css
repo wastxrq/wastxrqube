@@ -19,11 +19,34 @@
   --c-R: #d7263d;
   --c-L: #f2790f;
 
+  --oll-on: #f4c60a;
+  --oll-off: #2b303b;
+  --pll-arrow: #101114;
+  --cube-inactive: #b0b0b0;
+  --cube-grid: #1a1a1a;
+
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --panel-2: #eceef1;
+  --border: #d5d8dd;
+  --text: #1a1d24;
+  --muted: #6b7280;
+
+  --oll-off: #d5d8dd;
+  /* --cube-inactive/--cube-grid intentionally unchanged: this diagram reads like
+     a printed reference sheet, not app chrome, so it doesn't follow the theme. */
+  --cube-inactive: #b0b0b0;
+  --cube-grid: #1a1a1a;
+
+  color-scheme: light;
 }
 
 * {
@@ -33,7 +56,7 @@
 html,
 body,
 #app {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -68,38 +91,6 @@ input:focus-visible,
 [tabindex]:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-}
-
-.btn {
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 0.55em 1.1em;
-  font-size: 0.92rem;
-  font-weight: 500;
-  transition:
-    border-color 0.15s ease,
-    background 0.15s ease;
-}
-.btn:hover {
-  border-color: var(--accent-dim);
-}
-.btn.primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #08201b;
-  font-weight: 600;
-}
-.btn.primary:hover {
-  background: #4beed0;
-}
-.btn.ghost {
-  background: transparent;
-}
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }
 
 .panel {
